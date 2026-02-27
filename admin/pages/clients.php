@@ -17,9 +17,9 @@ displayAlert();
         <table class="admin-table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    
                     <th>Client Name</th>
-                    <th>Image</th>
+                    
                     <th>Status</th>
                     <th>Order</th>
                     <th>Created</th>
@@ -29,15 +29,9 @@ displayAlert();
             <tbody>
                 <?php foreach ($clients as $client): ?>
                     <tr>
-                        <td><?php echo $client['id']; ?></td>
+                        
                         <td><?php echo sanitize($client['client_name']); ?></td>
-                        <td>
-                            <?php if (!empty($client['image_path']) && file_exists(UPLOADS_PATH . $client['image_path'])): ?>
-                                <img src="<?php echo UPLOADS_URL . $client['image_path']; ?>" alt="Client" style="max-height: 50px; max-width: 50px;">
-                            <?php else: ?>
-                                <span style="color: var(--text-light);">No image</span>
-                            <?php endif; ?>
-                        </td>
+                        
                         <td>
                             <span class="badge" style="background-color: <?php echo $client['is_active'] ? '#28A745' : '#6C757D'; ?>;">
                                 <?php echo $client['is_active'] ? 'Active' : 'Inactive'; ?>

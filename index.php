@@ -223,11 +223,7 @@ unset($service);
                         <li class="nav-item"><a class="nav-link" href="#services" data-section="services">Services</a></li>
                         <li class="nav-item"><a class="nav-link" href="#clients"  data-section="clients">Clients</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contact"  data-section="contact">Contact</a></li>
-                        <li class="nav-item ms-lg-3">
-                            <a href="admin/login.php" class="btn-admin">
-                                <i class="fas fa-lock" style="font-size:.75rem;margin-right:.3rem;"></i>Admin
-                            </a>
-                        </li>
+
                     </ul>
                 </div>
             </div>

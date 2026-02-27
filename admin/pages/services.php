@@ -25,10 +25,10 @@ unset($service);
         <table class="admin-table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    
                     <th>Service Name</th>
-                    <th>Images</th>
-                    <th>Description</th>
+                    
+                    
                     <th>Status</th>
                     <th>Order</th>
                     <th>Created</th>
@@ -40,28 +40,8 @@ unset($service);
                     <tr>
                         <td><?php echo $service['id']; ?></td>
                         <td><?php echo sanitize($service['service_name']); ?></td>
-                        <td>
-                            <?php if (!empty($service['images'])): ?>
-                                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                                    <?php foreach ($service['images'] as $img): ?>
-                                        <div style="position: relative; display: inline-block;">
-                                            <img src="<?php echo UPLOADS_URL . $img['image_path']; ?>" 
-                                                 alt="Service" 
-                                                 style="height: 40px; width: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #eee;">
-                                            <button onclick="deleteServiceImage(<?php echo $img['id']; ?>, this)" 
-                                                    style="position: absolute; top: -6px; right: -6px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 16px; height: 16px; font-size: 9px; cursor: pointer; line-height: 16px; padding: 0;"
-                                                    title="Remove image">×</button>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                                <small style="color: var(--text-light);"><?php echo count($service['images']); ?> image(s)</small>
-                            <?php elseif (!empty($service['image_path']) && file_exists(UPLOADS_PATH . $service['image_path'])): ?>
-                                <img src="<?php echo UPLOADS_URL . $service['image_path']; ?>" alt="Service" style="max-height: 40px; max-width: 40px;">
-                            <?php else: ?>
-                                <span style="color: var(--text-light);">No images</span>
-                            <?php endif; ?>
-                        </td>
-                        <td><?php echo substr(sanitize($service['description']), 0, 50) . '...'; ?></td>
+                        
+                        
                         <td>
                             <span class="badge" style="background-color: <?php echo $service['is_active'] ? '#28A745' : '#6C757D'; ?>;">
                                 <?php echo $service['is_active'] ? 'Active' : 'Inactive'; ?>
