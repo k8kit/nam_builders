@@ -36,14 +36,10 @@ unset($service);
             padding: 1rem;
         }
         #verifyModal.open { display: flex !important; animation: vModalIn .25s ease; }
-        @keyframes vModalIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
+        @keyframes vModalIn { from { opacity: 0; } to { opacity: 1; } }
 
         .vm-box {
-            background: #fff;
-            border-radius: 16px;
+            background: #fff; border-radius: 16px;
             max-width: 420px; width: 100%;
             box-shadow: 0 24px 70px rgba(0,0,0,.3);
             overflow: hidden;
@@ -53,21 +49,13 @@ unset($service);
             from { transform: translateY(24px) scale(.97); opacity: 0; }
             to   { transform: translateY(0) scale(1); opacity: 1; }
         }
-
         .vm-header {
             background: var(--primary-color);
             padding: 1.6rem 1.8rem 1.3rem;
             position: relative;
         }
-        .vm-header h3 {
-            color: #fff; margin: 0;
-            font-size: 1.2rem; font-weight: 800;
-            letter-spacing: .01em;
-        }
-        .vm-header p {
-            color: rgba(255,255,255,.8);
-            font-size: .85rem; margin: .4rem 0 0;
-        }
+        .vm-header h3 { color: #fff; margin: 0; font-size: 1.2rem; font-weight: 800; }
+        .vm-header p  { color: rgba(255,255,255,.8); font-size: .85rem; margin: .4rem 0 0; }
         .vm-header .vm-icon {
             display: flex; align-items: center; justify-content: center;
             width: 52px; height: 52px; background: rgba(255,255,255,.15);
@@ -79,62 +67,35 @@ unset($service);
             background: rgba(255,255,255,.2); border: none;
             border-radius: 50%; width: 30px; height: 30px;
             color: #fff; font-size: 1.1rem; line-height: 30px;
-            text-align: center; cursor: pointer;
-            transition: background .2s;
+            text-align: center; cursor: pointer; transition: background .2s;
         }
         .vm-close-btn:hover { background: rgba(255,255,255,.35); }
-
         .vm-body { padding: 1.8rem; }
-
         .vm-email-display {
-            background: var(--light-bg);
-            border: 1.5px solid var(--border-color);
-            border-radius: 8px;
-            padding: .7rem 1rem;
-            font-size: .9rem;
-            color: var(--text-dark);
-            font-weight: 600;
+            background: var(--light-bg); border: 1.5px solid var(--border-color);
+            border-radius: 8px; padding: .7rem 1rem; font-size: .9rem;
+            color: var(--text-dark); font-weight: 600;
             display: flex; align-items: center; gap: .5rem;
-            margin-bottom: 1.4rem;
-            word-break: break-all;
+            margin-bottom: 1.4rem; word-break: break-all;
         }
         .vm-email-display i { color: var(--primary-color); flex-shrink: 0; }
-
         .vm-code-label {
-            font-size: .85rem; font-weight: 700;
-            color: var(--text-dark); letter-spacing: .04em;
-            text-transform: uppercase; margin-bottom: .6rem;
-            display: block;
+            font-size: .85rem; font-weight: 700; color: var(--text-dark);
+            letter-spacing: .04em; text-transform: uppercase;
+            margin-bottom: .6rem; display: block;
         }
-
-        /* 6 individual digit boxes */
-        .vm-digit-row {
-            display: flex; gap: .5rem; justify-content: center;
-            margin-bottom: 1.2rem;
-        }
+        .vm-digit-row { display: flex; gap: .5rem; justify-content: center; margin-bottom: 1.2rem; }
         .vm-digit {
-            width: 48px; height: 58px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 1.6rem; font-weight: 800;
-            text-align: center; line-height: 1;
-            color: var(--text-dark);
-            background: #fff;
-            transition: border-color .2s, box-shadow .2s;
-            caret-color: var(--primary-color);
-            outline: none;
+            width: 48px; height: 58px; border: 2px solid var(--border-color);
+            border-radius: 10px; font-size: 1.6rem; font-weight: 800;
+            text-align: center; line-height: 1; color: var(--text-dark);
+            background: #fff; transition: border-color .2s, box-shadow .2s;
+            caret-color: var(--primary-color); outline: none;
         }
-        .vm-digit:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(21,101,192,.12);
-        }
-        .vm-digit.filled {
-            border-color: var(--primary-color);
-            background: #F0F4FA;
-        }
+        .vm-digit:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(21,101,192,.12); }
+        .vm-digit.filled { border-color: var(--primary-color); background: #F0F4FA; }
         .vm-digit.error {
-            border-color: var(--danger-color) !important;
-            background: #FFF5F5;
+            border-color: var(--danger-color) !important; background: #FFF5F5;
             animation: shake .35s ease;
         }
         @keyframes shake {
@@ -143,34 +104,21 @@ unset($service);
             60%     { transform: translateX(5px); }
             80%     { transform: translateX(-3px); }
         }
-
-        .vm-timer {
-            text-align: center; font-size: .82rem;
-            color: var(--text-light); margin-bottom: 1.2rem;
-        }
+        .vm-timer { text-align: center; font-size: .82rem; color: var(--text-light); margin-bottom: 1.2rem; }
         .vm-timer strong { color: var(--primary-color); }
         .vm-timer.expired strong { color: var(--danger-color); }
-
         .vm-submit-btn {
-            background: var(--primary-color);
-            color: #fff; border: none;
-            width: 100%; padding: .85rem;
-            border-radius: 8px; font-size: 1rem;
-            font-weight: 700; font-family: inherit;
-            letter-spacing: .04em; cursor: pointer;
-            transition: background .25s, transform .15s, box-shadow .2s;
+            background: var(--primary-color); color: #fff; border: none;
+            width: 100%; padding: .85rem; border-radius: 8px; font-size: 1rem;
+            font-weight: 700; font-family: inherit; letter-spacing: .04em;
+            cursor: pointer; transition: background .25s, transform .15s, box-shadow .2s;
         }
         .vm-submit-btn:hover:not(:disabled) {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
+            background: var(--primary-dark); transform: translateY(-1px);
             box-shadow: 0 6px 20px rgba(21,101,192,.3);
         }
         .vm-submit-btn:disabled { background: #9ab5d8; cursor: not-allowed; }
-
-        .vm-resend {
-            text-align: center; margin-top: 1rem;
-            font-size: .85rem; color: var(--text-light);
-        }
+        .vm-resend { text-align: center; margin-top: 1rem; font-size: .85rem; color: var(--text-light); }
         .vm-resend button {
             background: none; border: none; padding: 0;
             color: var(--primary-color); font-weight: 700;
@@ -178,29 +126,28 @@ unset($service);
             font-size: .85rem; font-family: inherit;
         }
         .vm-resend button:disabled { color: var(--text-light); cursor: not-allowed; text-decoration: none; }
-
-        .vm-alert {
-            border-radius: 8px;
-            padding: .7rem 1rem;
-            font-size: .85rem;
-            margin-bottom: 1rem;
-            display: none;
-        }
+        .vm-alert { border-radius: 8px; padding: .7rem 1rem; font-size: .85rem; margin-bottom: 1rem; display: none; }
         .vm-alert.show { display: flex; align-items: center; gap: .5rem; }
         .vm-alert.success { background: #D4EDDA; color: #155724; border: 1px solid #C3E6CB; }
         .vm-alert.error   { background: #F8D7DA; color: #721C24; border: 1px solid #F5C6CB; }
         .vm-alert.info    { background: #D1ECF1; color: #0C5460; border: 1px solid #BEE5EB; }
-
-        /* Progress dots under code boxes */
-        .vm-progress {
-            display: flex; justify-content: center; gap: 4px; margin-bottom: .8rem;
-        }
-        .vm-prog-dot {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: var(--border-color);
-            transition: background .2s;
-        }
+        .vm-progress { display: flex; justify-content: center; gap: 4px; margin-bottom: .8rem; }
+        .vm-prog-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border-color); transition: background .2s; }
         .vm-prog-dot.filled { background: var(--primary-color); }
+
+        /* ── Inline success banner (shown after modal closes) ── */
+        #contactSuccessBanner {
+            display: none;
+            background: #D4EDDA; color: #155724;
+            border: 1px solid #C3E6CB;
+            border-radius: 10px; padding: 1.2rem 1.4rem;
+            margin-bottom: 1.5rem;
+            align-items: center; gap: .8rem;
+            font-weight: 600; font-size: .97rem;
+        }
+        #contactSuccessBanner.show { display: flex; animation: bannerIn .4s ease; }
+        @keyframes bannerIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        #contactSuccessBanner i { font-size: 1.3rem; flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -223,7 +170,6 @@ unset($service);
                         <li class="nav-item"><a class="nav-link" href="#services" data-section="services">Services</a></li>
                         <li class="nav-item"><a class="nav-link" href="#clients"  data-section="clients">Clients</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contact"  data-section="contact">Contact</a></li>
-
                     </ul>
                 </div>
             </div>
@@ -420,8 +366,13 @@ unset($service);
                 <p>Ready to start your project? Contact us today for a free consultation.</p>
             </div>
             <div class="contact-form reveal">
-                <?php displayAlert(); ?>
-                <!-- This form is intercepted by JS — actual POST happens after OTP verification -->
+
+                <!-- ✅ Success banner shown inline after verification — replaces session-based alert -->
+                <div id="contactSuccessBanner">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="contactSuccessMsg"></span>
+                </div>
+
                 <form id="contactForm" novalidate>
                     <div class="row">
                         <div class="col-md-6">
@@ -480,16 +431,11 @@ unset($service);
                 <p>We sent a 6-digit code to your email address.</p>
             </div>
             <div class="vm-body">
-                <!-- Alert area -->
                 <div class="vm-alert" id="vmAlert"></div>
-
-                <!-- Email display -->
                 <div class="vm-email-display">
                     <i class="fas fa-envelope"></i>
                     <span id="vmEmailDisplay">—</span>
                 </div>
-
-                <!-- Digit inputs -->
                 <span class="vm-code-label">Enter 6-digit code</span>
                 <div class="vm-digit-row" id="vmDigitRow">
                     <input class="vm-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code" id="vd0">
@@ -499,8 +445,6 @@ unset($service);
                     <input class="vm-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="vd4">
                     <input class="vm-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="vd5">
                 </div>
-
-                <!-- Progress dots -->
                 <div class="vm-progress" id="vmProgress">
                     <div class="vm-prog-dot" id="vp0"></div>
                     <div class="vm-prog-dot" id="vp1"></div>
@@ -509,18 +453,12 @@ unset($service);
                     <div class="vm-prog-dot" id="vp4"></div>
                     <div class="vm-prog-dot" id="vp5"></div>
                 </div>
-
-                <!-- Countdown timer -->
                 <div class="vm-timer" id="vmTimer">
                     Code expires in <strong id="vmCountdown">10:00</strong>
                 </div>
-
-                <!-- Verify button -->
                 <button class="vm-submit-btn" id="vmVerifyBtn" disabled>
                     <i class="fas fa-check-circle" style="margin-right:.4rem;"></i>Verify &amp; Send Message
                 </button>
-
-                <!-- Resend -->
                 <div class="vm-resend">
                     Didn't receive the code?
                     <button id="vmResendBtn" disabled>Resend Code</button>
@@ -566,13 +504,10 @@ unset($service);
     <script>
     (function () {
 
-        /* ══════════════════════════════════════════════════════
-           1. Navbar scroll effect + active link
-        ══════════════════════════════════════════════════════ */
+        /* ── 1. Navbar scroll + active link ── */
         var header   = document.getElementById('mainHeader');
         var sections = document.querySelectorAll('section[id]');
         var navLinks = document.querySelectorAll('.navbar-nav .nav-link[data-section]');
-
         function updateNav() {
             header.classList.toggle('scrolled', window.scrollY > 40);
             var current = '';
@@ -582,17 +517,13 @@ unset($service);
         window.addEventListener('scroll', updateNav, { passive: true });
         updateNav();
 
-        /* ══════════════════════════════════════════════════════
-           2. Scroll-reveal
-        ══════════════════════════════════════════════════════ */
+        /* ── 2. Scroll-reveal ── */
         var revObs = new IntersectionObserver(function (entries) {
             entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(function (el) { revObs.observe(el); });
 
-        /* ══════════════════════════════════════════════════════
-           3. Animated counters
-        ══════════════════════════════════════════════════════ */
+        /* ── 3. Animated counters ── */
         var counted = false, statsEl = document.getElementById('stats');
         if (statsEl) {
             new IntersectionObserver(function (e) {
@@ -606,9 +537,7 @@ unset($service);
             }, { threshold: .4 }).observe(statsEl);
         }
 
-        /* ══════════════════════════════════════════════════════
-           4. Service Modal
-        ══════════════════════════════════════════════════════ */
+        /* ── 4. Service Modal ── */
         var svcModal   = document.getElementById('svcModal');
         var slidesWrap = document.getElementById('svcmSlides');
         var dotsWrap   = document.getElementById('svcmDots');
@@ -623,7 +552,6 @@ unset($service);
             });
             card.addEventListener('keypress', function (e) { if (e.key === 'Enter') card.click(); });
         });
-
         function openSvcModal(name, desc, images) {
             titleEl.textContent = name; descEl.textContent = desc;
             slidesWrap.innerHTML = ''; dotsWrap.innerHTML = '';
@@ -657,36 +585,26 @@ unset($service);
         document.getElementById('svcmQuoteBtn').addEventListener('click', closeSvcModal);
         svcModal.addEventListener('click', function (e) { if (e.target === svcModal) closeSvcModal(); });
 
-        /* ══════════════════════════════════════════════════════
-           5. VERIFICATION MODAL
-        ══════════════════════════════════════════════════════ */
-        var verifyModal   = document.getElementById('verifyModal');
-        var vmEmailDisplay= document.getElementById('vmEmailDisplay');
-        var vmAlert       = document.getElementById('vmAlert');
-        var vmVerifyBtn   = document.getElementById('vmVerifyBtn');
-        var vmResendBtn   = document.getElementById('vmResendBtn');
-        var vmResendTimer = document.getElementById('vmResendTimer');
-        var vmCountdown   = document.getElementById('vmCountdown');
-        var vmTimerEl     = document.getElementById('vmTimer');
-        var digits        = [document.getElementById('vd0'), document.getElementById('vd1'),
-                             document.getElementById('vd2'), document.getElementById('vd3'),
-                             document.getElementById('vd4'), document.getElementById('vd5')];
-        var progDots      = [document.getElementById('vp0'), document.getElementById('vp1'),
-                             document.getElementById('vp2'), document.getElementById('vp3'),
-                             document.getElementById('vp4'), document.getElementById('vp5')];
+        /* ── 5. Verification Modal ── */
+        var verifyModal    = document.getElementById('verifyModal');
+        var vmEmailDisplay = document.getElementById('vmEmailDisplay');
+        var vmAlert        = document.getElementById('vmAlert');
+        var vmVerifyBtn    = document.getElementById('vmVerifyBtn');
+        var vmResendBtn    = document.getElementById('vmResendBtn');
+        var vmResendTimer  = document.getElementById('vmResendTimer');
+        var vmCountdown    = document.getElementById('vmCountdown');
+        var vmTimerEl      = document.getElementById('vmTimer');
+        var digits         = [0,1,2,3,4,5].map(function (i) { return document.getElementById('vd' + i); });
+        var progDots       = [0,1,2,3,4,5].map(function (i) { return document.getElementById('vp' + i); });
 
-        // Saved form data (set when user submits contact form)
-        var savedFormData = null;
+        var savedFormData       = null;
+        var countdownInterval   = null;
+        var resendInterval      = null;
+        var countdownSeconds    = 0;
 
-        // Countdown timers
-        var countdownInterval  = null;
-        var resendInterval     = null;
-        var countdownSeconds   = 0;
-
-        // ── Digit input wiring ──────────────────────────────────────────────
+        /* digit wiring */
         digits.forEach(function (inp, i) {
             inp.addEventListener('input', function () {
-                // allow only digits
                 inp.value = inp.value.replace(/[^0-9]/g, '').slice(-1);
                 progDots[i].classList.toggle('filled', inp.value !== '');
                 inp.classList.toggle('filled', inp.value !== '');
@@ -702,64 +620,44 @@ unset($service);
                     digits[i - 1].focus();
                     updateVerifyBtn();
                 }
-                // Allow paste
-                if (e.key === 'v' && (e.ctrlKey || e.metaKey)) return;
             });
             inp.addEventListener('paste', function (e) {
                 e.preventDefault();
                 var pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '').slice(0, 6);
                 pasted.split('').forEach(function (ch, j) {
-                    if (digits[j]) {
-                        digits[j].value = ch;
-                        progDots[j].classList.add('filled');
-                        digits[j].classList.add('filled');
-                    }
+                    if (digits[j]) { digits[j].value = ch; progDots[j].classList.add('filled'); digits[j].classList.add('filled'); }
                 });
-                if (pasted.length < 6 && digits[pasted.length]) digits[pasted.length].focus();
-                else if (digits[5]) digits[5].focus();
+                var focus = Math.min(pasted.length, 5);
+                digits[focus].focus();
                 updateVerifyBtn();
             });
         });
 
-        function updateVerifyBtn() {
-            var code = getCode();
-            vmVerifyBtn.disabled = (code.length !== 6 || countdownSeconds <= 0);
-        }
-
-        function getCode() {
-            return digits.map(function (d) { return d.value; }).join('');
-        }
-
+        function getCode()       { return digits.map(function (d) { return d.value; }).join(''); }
+        function updateVerifyBtn() { vmVerifyBtn.disabled = (getCode().length !== 6 || countdownSeconds <= 0); }
         function clearDigits() {
-            digits.forEach(function (d, i) {
-                d.value = '';
-                d.classList.remove('filled', 'error');
-                progDots[i].classList.remove('filled');
-            });
+            digits.forEach(function (d, i) { d.value = ''; d.classList.remove('filled', 'error'); progDots[i].classList.remove('filled'); });
             vmVerifyBtn.disabled = true;
         }
-
         function shakeDigits() {
             digits.forEach(function (d) { d.classList.add('error'); });
             setTimeout(function () { digits.forEach(function (d) { d.classList.remove('error'); }); }, 500);
         }
 
-        // ── Alert helper ────────────────────────────────────────────────────
         function showVmAlert(msg, type) {
+            var icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
             vmAlert.className = 'vm-alert show ' + type;
-            vmAlert.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle') + '"></i> ' + msg;
+            vmAlert.innerHTML = '<i class="fas fa-' + icon + '"></i> ' + msg;
         }
         function hideVmAlert() { vmAlert.className = 'vm-alert'; vmAlert.innerHTML = ''; }
 
-        // ── Countdown (10 minutes = 600s) ───────────────────────────────────
         function startCountdown(seconds) {
             clearInterval(countdownInterval);
             countdownSeconds = seconds;
             updateVerifyBtn();
             countdownInterval = setInterval(function () {
                 countdownSeconds--;
-                var m = Math.floor(countdownSeconds / 60);
-                var s = countdownSeconds % 60;
+                var m = Math.floor(countdownSeconds / 60), s = countdownSeconds % 60;
                 vmCountdown.textContent = m + ':' + (s < 10 ? '0' : '') + s;
                 if (countdownSeconds <= 0) {
                     clearInterval(countdownInterval);
@@ -771,7 +669,6 @@ unset($service);
             }, 1000);
         }
 
-        // ── Resend cooldown (60s) ────────────────────────────────────────────
         function startResendCooldown() {
             vmResendBtn.disabled = true;
             var secs = 60;
@@ -779,19 +676,13 @@ unset($service);
             resendInterval = setInterval(function () {
                 secs--;
                 vmResendTimer.textContent = ' (' + secs + 's)';
-                if (secs <= 0) {
-                    clearInterval(resendInterval);
-                    vmResendBtn.disabled = false;
-                    vmResendTimer.textContent = '';
-                }
+                if (secs <= 0) { clearInterval(resendInterval); vmResendBtn.disabled = false; vmResendTimer.textContent = ''; }
             }, 1000);
         }
 
-        // ── Open / close modal ───────────────────────────────────────────────
         function openVerifyModal(email) {
             vmEmailDisplay.textContent = email;
-            clearDigits();
-            hideVmAlert();
+            clearDigits(); hideVmAlert();
             vmTimerEl.classList.remove('expired');
             vmCountdown.textContent = '10:00';
             startCountdown(600);
@@ -810,54 +701,34 @@ unset($service);
 
         document.getElementById('vmCloseBtn').addEventListener('click', closeVerifyModal);
         verifyModal.addEventListener('click', function (e) { if (e.target === verifyModal) closeVerifyModal(); });
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                closeVerifyModal();
-                closeSvcModal();
-            }
-        });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeVerifyModal(); closeSvcModal(); } });
 
-        // ── Send OTP to backend ─────────────────────────────────────────────
         function sendOTP(email, onSuccess, onError) {
-            var fd = new FormData();
-            fd.append('email', email);
+            var fd = new FormData(); fd.append('email', email);
             fetch('backend/send_verification.php', { method: 'POST', body: fd })
                 .then(function (r) { return r.json(); })
-                .then(function (data) {
-                    if (data.success) onSuccess(data);
-                    else onError(data.message);
-                })
+                .then(function (data) { if (data.success) onSuccess(data); else onError(data.message); })
                 .catch(function () { onError('Network error. Please try again.'); });
         }
 
-        // ── Contact form submit handler ─────────────────────────────────────
+        /* contact form submit → send OTP */
         var contactForm = document.getElementById('contactForm');
         var submitBtn   = document.getElementById('submitBtn');
-
         contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
-
             var name    = document.getElementById('cf_name').value.trim();
             var email   = document.getElementById('cf_email').value.trim();
             var message = document.getElementById('cf_message').value.trim();
-
-            // Basic client-side validation
-            if (!name) { document.getElementById('cf_name').focus(); return; }
-            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                document.getElementById('cf_email').focus(); return;
-            }
+            if (!name)    { document.getElementById('cf_name').focus(); return; }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('cf_email').focus(); return; }
             if (!message) { document.getElementById('cf_message').focus(); return; }
 
-            // Save form data for later submission
             savedFormData = new FormData(contactForm);
-
-            // Disable button while sending
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:.5rem;"></i>Sending code…';
             submitBtn.disabled = true;
 
             sendOTP(email,
-                function (data) {
-                    // Success: open verification modal
+                function () {
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:.5rem;"></i>Send Message';
                     submitBtn.disabled = false;
                     openVerifyModal(email);
@@ -865,43 +736,36 @@ unset($service);
                 function (errMsg) {
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:.5rem;"></i>Send Message';
                     submitBtn.disabled = false;
-                    // Show inline error
-                    var existing = document.getElementById('otpSendError');
-                    if (!existing) {
-                        existing = document.createElement('div');
-                        existing.id = 'otpSendError';
-                        existing.className = 'alert alert-danger';
-                        existing.style.marginBottom = '1rem';
-                        contactForm.insertBefore(existing, contactForm.firstChild);
+                    var el = document.getElementById('otpSendError');
+                    if (!el) {
+                        el = document.createElement('div'); el.id = 'otpSendError';
+                        el.className = 'alert alert-danger'; el.style.marginBottom = '1rem';
+                        contactForm.insertBefore(el, contactForm.firstChild);
                     }
-                    existing.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + errMsg;
-                    setTimeout(function () { if (existing.parentNode) existing.parentNode.removeChild(existing); }, 6000);
+                    el.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + errMsg;
+                    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 6000);
                 }
             );
         });
 
-        // ── Resend OTP ──────────────────────────────────────────────────────
+        /* resend OTP */
         vmResendBtn.addEventListener('click', function () {
             var email = document.getElementById('cf_email').value.trim();
-            hideVmAlert();
-            clearDigits();
-            vmTimerEl.classList.remove('expired');
-            vmCountdown.textContent = '10:00';
+            hideVmAlert(); clearDigits();
+            vmTimerEl.classList.remove('expired'); vmCountdown.textContent = '10:00';
             showVmAlert('Sending a new code…', 'info');
-
             sendOTP(email,
                 function () {
                     showVmAlert('New code sent! Check your inbox.', 'success');
-                    startCountdown(600);
-                    startResendCooldown();
-                    setTimeout(function () { hideVmAlert(); }, 4000);
+                    startCountdown(600); startResendCooldown();
+                    setTimeout(hideVmAlert, 4000);
                     digits[0].focus();
                 },
                 function (msg) { showVmAlert(msg, 'error'); }
             );
         });
 
-        // ── Verify button: submit form with OTP ─────────────────────────────
+        /* ── KEY FIX: verify button — reads JSON, shows alert inline ── */
         vmVerifyBtn.addEventListener('click', function () {
             var code = getCode();
             if (code.length !== 6) return;
@@ -909,25 +773,42 @@ unset($service);
             vmVerifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:.4rem;"></i>Verifying…';
             vmVerifyBtn.disabled = true;
 
-            // Append OTP code to form data and POST
             if (!savedFormData) {
                 showVmAlert('Form data lost. Please close and re-submit the form.', 'error');
                 vmVerifyBtn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:.4rem;"></i>Verify & Send Message';
-                vmVerifyBtn.disabled = false;
                 return;
             }
 
             var fd = new FormData();
-            // Copy all original form fields
             for (var pair of savedFormData.entries()) { fd.append(pair[0], pair[1]); }
             fd.append('otp_code', code);
 
-            fetch('backend/submit_contact.php', { method: 'POST', body: fd, redirect: 'manual' })
-                .then(function (r) {
-                    // submit_contact.php redirects — treat any response as success
-                    // (it sets a session alert and redirects to index.php#contact)
-                    closeVerifyModal();
-                    window.location.href = 'index.php#contact';
+            // ── No redirect:'manual' — fetch the JSON response directly ──
+            fetch('backend/submit_contact.php', { method: 'POST', body: fd })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.success) {
+                        // ✅ Close modal, clear form, show inline success banner
+                        closeVerifyModal();
+                        contactForm.reset();
+
+                        var banner = document.getElementById('contactSuccessBanner');
+                        var msgEl  = document.getElementById('contactSuccessMsg');
+                        msgEl.textContent = data.message;
+                        banner.classList.add('show');
+
+                        // Scroll the banner into view smoothly
+                        banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                        // Auto-hide after 8 seconds
+                        setTimeout(function () { banner.classList.remove('show'); }, 8000);
+                    } else {
+                        // ❌ Wrong code or server error — shake digits, show alert in modal
+                        shakeDigits();
+                        showVmAlert(data.message, 'error');
+                        vmVerifyBtn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:.4rem;"></i>Verify & Send Message';
+                        vmVerifyBtn.disabled = false;
+                    }
                 })
                 .catch(function () {
                     shakeDigits();

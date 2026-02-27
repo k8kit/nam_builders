@@ -2,6 +2,8 @@
 require_once '../config/database.php';
 require_once '../includes/functions.php';
 
+header('Content-Type: application/json');
+
 $response = ['success' => false, 'message' => ''];
 
 try {
@@ -42,7 +44,6 @@ try {
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         throw new Exception('Valid email is required.');
     }
-    // Ensure the email used matches the one that was verified
     if (strtolower($email) !== strtolower($otp['email'])) {
         throw new Exception('The email address does not match the verified email.');
     }
@@ -59,24 +60,18 @@ try {
     $stmt->bind_param("sssss", $full_name, $email, $phone, $service_needed, $message);
 
     if ($stmt->execute()) {
-        // Clear OTP session after successful submission
         unset($_SESSION['otp_data']);
-
-        $_SESSION['alert'] = [
-            'message' => 'Thank you, ' . htmlspecialchars($full_name) . '! Your message has been received. We will contact you soon.',
-            'type'    => 'success',
-        ];
+        // Return JSON — JS will show the success alert directly in index.php
+        $response['success'] = true;
+        $response['message'] = 'Thank you, ' . htmlspecialchars($full_name) . '! Your message has been received. We will contact you soon.';
     } else {
         throw new Exception($stmt->error);
     }
     $stmt->close();
 
 } catch (Exception $e) {
-    $_SESSION['alert'] = [
-        'message' => 'Error: ' . $e->getMessage(),
-        'type'    => 'danger',
-    ];
+    $response['success'] = false;
+    $response['message'] = $e->getMessage();
 }
 
-header('Location: ../index.php#contact');
-exit();
+echo json_encode($response);
