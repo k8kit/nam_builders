@@ -7,7 +7,7 @@
     <div class="admin-card" style="text-align: center;">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
-                <h4 style="margin: 0; color: var(--text-light); font-size: 0.9rem;">Total Clients</h4>
+                <h4 style="margin: 0; color: var(--text-light); font-size: 0.9rem;">Total Client Displayed</h4>
                 <h2 style="margin: 0.5rem 0 0; color: var(--primary-color); font-size: 2rem;">
                     <?php echo $stats['total_clients']; ?>
                 </h2>
@@ -19,7 +19,7 @@
     <div class="admin-card" style="text-align: center;">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
-                <h4 style="margin: 0; color: var(--text-light); font-size: 0.9rem;">Total Services</h4>
+                <h4 style="margin: 0; color: var(--text-light); font-size: 0.9rem;">Total Services Displayed</h4>
                 <h2 style="margin: 0.5rem 0 0; color: #007BFF; font-size: 2rem;">
                     <?php echo $stats['total_services']; ?>
                 </h2>
@@ -66,31 +66,6 @@
         <a href="dashboard.php?page=messages" class="btn-add" style="text-align: center; padding: 1rem; background-color: #007BFF;">
             <i class="fas fa-envelope"></i> View Messages
         </a>
-        <a href="../backend/logout.php" class="btn-add" style="text-align: center; padding: 1rem; background-color: #6C757D;">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-    </div>
-</div>
 
-<!-- System Info -->
-<div class="admin-card" style="margin-top: 2rem;">
-    <h3>System Information</h3>
-    <table class="admin-table" style="margin-top: 1rem;">
-        <tr>
-            <td style="border: none; padding: 0.5rem 0;"><strong>PHP Version:</strong></td>
-            <td style="border: none; padding: 0.5rem 0; text-align: right;"><?php echo phpversion(); ?></td>
-        </tr>
-        <tr>
-            <td style="border: none; padding: 0.5rem 0;"><strong>Database:</strong></td>
-            <td style="border: none; padding: 0.5rem 0; text-align: right;">nam_builders</td>
-        </tr>
-        <tr>
-            <td style="border: none; padding: 0.5rem 0;"><strong>Current User:</strong></td>
-            <td style="border: none; padding: 0.5rem 0; text-align: right;"><?php echo sanitize($_SESSION['admin_username']); ?></td>
-        </tr>
-        <tr>
-            <td style="border: none; padding: 0.5rem 0;"><strong>Last Login:</strong></td>
-            <td style="border: none; padding: 0.5rem 0; text-align: right;"><?php echo date('M d, Y h:i A'); ?></td>
-        </tr>
-    </table>
+    </div>
 </div>

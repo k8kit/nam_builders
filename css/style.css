@@ -521,13 +521,8 @@ section.light-bg { background: var(--light-bg); }
 .carousel-wrapper {
     display: flex;
     gap: 2rem;
-    animation: scroll-left 30s linear infinite;
     width: max-content;
-}
-.carousel-wrapper:hover { animation-play-state: paused; }
-@keyframes scroll-left {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    /* animation injected by carousel.js after images load */
 }
 .carousel-item {
     flex: 0 0 180px; height: 120px;
@@ -541,8 +536,16 @@ section.light-bg { background: var(--light-bg); }
 .carousel-placeholder {
     width: 100%; height: 100%;
     display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: .5rem;
+    background: var(--light-bg);
     border: 2px dashed var(--border-color);
-    font-size: 2.5rem; color: var(--border-color);
+    border-radius: 8px;
+    font-size: 1.8rem; color: var(--border-color);
+}
+.carousel-placeholder span {
+    font-size: .72rem; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
+    color: var(--border-color);
 }
 
 /* ── Contact ── */

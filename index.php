@@ -332,26 +332,30 @@ unset($service);
                 <h2>Our Trusted Clients</h2>
                 <p>Partnering with industry leaders to deliver excellence.</p>
             </div>
-            <div class="clients-carousel reveal">
+            <div class="clients-carousel">
                 <div class="carousel-wrapper" id="carouselWrapper">
-                    <?php foreach ($clients as $client): ?>
+                    <?php
+                    // Render clients twice (A + B) for seamless infinite loop
+                    for ($pass = 0; $pass < 2; $pass++):
+                        foreach ($clients as $client):
+                    ?>
                         <div class="carousel-item">
-                            <?php if (!empty($client['image_path']) && file_exists(UPLOADS_PATH . $client['image_path'])): ?>
-                                <img src="<?php echo UPLOADS_URL . $client['image_path']; ?>" alt="<?php echo sanitize($client['client_name']); ?>">
+                            <?php if (!empty($client['image_path'])): ?>
+                                <img src="<?php echo UPLOADS_URL . $client['image_path']; ?>"
+                                     alt="<?php echo sanitize($client['client_name']); ?>"
+                                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                <div class="carousel-placeholder" style="display:none;">
+                                    <i class="fas fa-building"></i>
+                                    <span><?php echo sanitize($client['client_name']); ?></span>
+                                </div>
                             <?php else: ?>
-                                <div class="carousel-placeholder"><i class="fas fa-building"></i></div>
+                                <div class="carousel-placeholder">
+                                    <i class="fas fa-building"></i>
+                                    <span><?php echo sanitize($client['client_name']); ?></span>
+                                </div>
                             <?php endif; ?>
                         </div>
-                    <?php endforeach; ?>
-                    <?php foreach ($clients as $client): ?>
-                        <div class="carousel-item">
-                            <?php if (!empty($client['image_path']) && file_exists(UPLOADS_PATH . $client['image_path'])): ?>
-                                <img src="<?php echo UPLOADS_URL . $client['image_path']; ?>" alt="<?php echo sanitize($client['client_name']); ?>">
-                            <?php else: ?>
-                                <div class="carousel-placeholder"><i class="fas fa-building"></i></div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
+                    <?php endforeach; endfor; ?>
                 </div>
             </div>
         </div>
