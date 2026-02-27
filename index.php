@@ -254,8 +254,7 @@ unset($service);
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-lg">
                 <a class="navbar-brand" href="#home">
-                    <i class="fas fa-building" style="color: var(--primary-color); font-size: 1.8rem;"></i>
-                    <span>NAM Builders</span>
+                    <img src="uploads/nam-logo.png" alt="NAM Builders and Supply Corp" style="height: 55px; width: auto;">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
@@ -267,7 +266,6 @@ unset($service);
                         <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                     </ul>
-                    <a href="admin/login.php" class="btn btn-admin ms-3">Admin Panel</a>
                 </div>
             </div>
         </nav>
