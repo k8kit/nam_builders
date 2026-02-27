@@ -25,16 +25,192 @@ unset($service);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Verification Modal ── */
+        #verifyModal {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.65);
+            z-index: 10000;
+            align-items: center; justify-content: center;
+            padding: 1rem;
+        }
+        #verifyModal.open { display: flex !important; animation: vModalIn .25s ease; }
+        @keyframes vModalIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .vm-box {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 420px; width: 100%;
+            box-shadow: 0 24px 70px rgba(0,0,0,.3);
+            overflow: hidden;
+            animation: vBoxIn .3s ease;
+        }
+        @keyframes vBoxIn {
+            from { transform: translateY(24px) scale(.97); opacity: 0; }
+            to   { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .vm-header {
+            background: var(--primary-color);
+            padding: 1.6rem 1.8rem 1.3rem;
+            position: relative;
+        }
+        .vm-header h3 {
+            color: #fff; margin: 0;
+            font-size: 1.2rem; font-weight: 800;
+            letter-spacing: .01em;
+        }
+        .vm-header p {
+            color: rgba(255,255,255,.8);
+            font-size: .85rem; margin: .4rem 0 0;
+        }
+        .vm-header .vm-icon {
+            display: flex; align-items: center; justify-content: center;
+            width: 52px; height: 52px; background: rgba(255,255,255,.15);
+            border-radius: 50%; margin-bottom: 1rem;
+            font-size: 1.5rem; color: #fff;
+        }
+        .vm-close-btn {
+            position: absolute; top: 1rem; right: 1rem;
+            background: rgba(255,255,255,.2); border: none;
+            border-radius: 50%; width: 30px; height: 30px;
+            color: #fff; font-size: 1.1rem; line-height: 30px;
+            text-align: center; cursor: pointer;
+            transition: background .2s;
+        }
+        .vm-close-btn:hover { background: rgba(255,255,255,.35); }
+
+        .vm-body { padding: 1.8rem; }
+
+        .vm-email-display {
+            background: var(--light-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: .7rem 1rem;
+            font-size: .9rem;
+            color: var(--text-dark);
+            font-weight: 600;
+            display: flex; align-items: center; gap: .5rem;
+            margin-bottom: 1.4rem;
+            word-break: break-all;
+        }
+        .vm-email-display i { color: var(--primary-color); flex-shrink: 0; }
+
+        .vm-code-label {
+            font-size: .85rem; font-weight: 700;
+            color: var(--text-dark); letter-spacing: .04em;
+            text-transform: uppercase; margin-bottom: .6rem;
+            display: block;
+        }
+
+        /* 6 individual digit boxes */
+        .vm-digit-row {
+            display: flex; gap: .5rem; justify-content: center;
+            margin-bottom: 1.2rem;
+        }
+        .vm-digit {
+            width: 48px; height: 58px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1.6rem; font-weight: 800;
+            text-align: center; line-height: 1;
+            color: var(--text-dark);
+            background: #fff;
+            transition: border-color .2s, box-shadow .2s;
+            caret-color: var(--primary-color);
+            outline: none;
+        }
+        .vm-digit:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(21,101,192,.12);
+        }
+        .vm-digit.filled {
+            border-color: var(--primary-color);
+            background: #F0F4FA;
+        }
+        .vm-digit.error {
+            border-color: var(--danger-color) !important;
+            background: #FFF5F5;
+            animation: shake .35s ease;
+        }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20%     { transform: translateX(-5px); }
+            60%     { transform: translateX(5px); }
+            80%     { transform: translateX(-3px); }
+        }
+
+        .vm-timer {
+            text-align: center; font-size: .82rem;
+            color: var(--text-light); margin-bottom: 1.2rem;
+        }
+        .vm-timer strong { color: var(--primary-color); }
+        .vm-timer.expired strong { color: var(--danger-color); }
+
+        .vm-submit-btn {
+            background: var(--primary-color);
+            color: #fff; border: none;
+            width: 100%; padding: .85rem;
+            border-radius: 8px; font-size: 1rem;
+            font-weight: 700; font-family: inherit;
+            letter-spacing: .04em; cursor: pointer;
+            transition: background .25s, transform .15s, box-shadow .2s;
+        }
+        .vm-submit-btn:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(21,101,192,.3);
+        }
+        .vm-submit-btn:disabled { background: #9ab5d8; cursor: not-allowed; }
+
+        .vm-resend {
+            text-align: center; margin-top: 1rem;
+            font-size: .85rem; color: var(--text-light);
+        }
+        .vm-resend button {
+            background: none; border: none; padding: 0;
+            color: var(--primary-color); font-weight: 700;
+            cursor: pointer; text-decoration: underline;
+            font-size: .85rem; font-family: inherit;
+        }
+        .vm-resend button:disabled { color: var(--text-light); cursor: not-allowed; text-decoration: none; }
+
+        .vm-alert {
+            border-radius: 8px;
+            padding: .7rem 1rem;
+            font-size: .85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .vm-alert.show { display: flex; align-items: center; gap: .5rem; }
+        .vm-alert.success { background: #D4EDDA; color: #155724; border: 1px solid #C3E6CB; }
+        .vm-alert.error   { background: #F8D7DA; color: #721C24; border: 1px solid #F5C6CB; }
+        .vm-alert.info    { background: #D1ECF1; color: #0C5460; border: 1px solid #BEE5EB; }
+
+        /* Progress dots under code boxes */
+        .vm-progress {
+            display: flex; justify-content: center; gap: 4px; margin-bottom: .8rem;
+        }
+        .vm-prog-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--border-color);
+            transition: background .2s;
+        }
+        .vm-prog-dot.filled { background: var(--primary-color); }
+    </style>
 </head>
 <body>
 
-    <!-- ── Header (fixed) ── -->
+    <!-- ── Header ── -->
     <header id="mainHeader">
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-lg">
                 <a class="navbar-brand" href="#home">
-                    <img src="uploads/nam-logo.png" alt="NAM Builders"
-                         onerror="this.style.display='none'">
+                    <img src="uploads/nam-logo.png" alt="NAM Builders" onerror="this.style.display='none'">
                     <span>NAM Builders <span style="color:var(--primary-color);">&amp; Supply Corp.</span></span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -249,18 +425,19 @@ unset($service);
             </div>
             <div class="contact-form reveal">
                 <?php displayAlert(); ?>
-                <form method="POST" action="backend/submit_contact.php" id="contactForm">
+                <!-- This form is intercepted by JS — actual POST happens after OTP verification -->
+                <form id="contactForm" novalidate>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label><i class="fas fa-user" style="color:var(--primary-color);margin-right:.4rem;"></i>Full Name</label>
-                                <input type="text" name="full_name" class="form-control" placeholder="Juan dela Cruz" required>
+                                <input type="text" name="full_name" id="cf_name" class="form-control" placeholder="Juan dela Cruz" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label><i class="fas fa-envelope" style="color:var(--primary-color);margin-right:.4rem;"></i>Email</label>
-                                <input type="email" name="email" class="form-control" placeholder="juan@example.com" required>
+                                <input type="email" name="email" id="cf_email" class="form-control" placeholder="juan@example.com" required>
                             </div>
                         </div>
                     </div>
@@ -268,13 +445,13 @@ unset($service);
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label><i class="fas fa-phone" style="color:var(--primary-color);margin-right:.4rem;"></i>Phone</label>
-                                <input type="tel" name="phone" class="form-control" placeholder="+63 9XX XXX XXXX">
+                                <input type="tel" name="phone" id="cf_phone" class="form-control" placeholder="+63 9XX XXX XXXX">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label><i class="fas fa-cogs" style="color:var(--primary-color);margin-right:.4rem;"></i>Service Needed</label>
-                                <select name="service_needed" class="form-control">
+                                <select name="service_needed" id="cf_service" class="form-control">
                                     <option value="">Select a service</option>
                                     <?php foreach ($services as $sv): ?>
                                         <option value="<?php echo htmlspecialchars($sv['service_name']); ?>">
@@ -287,7 +464,7 @@ unset($service);
                     </div>
                     <div class="form-group">
                         <label><i class="fas fa-comment-dots" style="color:var(--primary-color);margin-right:.4rem;"></i>Message</label>
-                        <textarea name="message" class="form-control" placeholder="Tell us about your project..." required></textarea>
+                        <textarea name="message" id="cf_message" class="form-control" placeholder="Tell us about your project..." required></textarea>
                     </div>
                     <button type="submit" class="btn-submit" id="submitBtn">
                         <i class="fas fa-paper-plane" style="margin-right:.5rem;"></i>Send Message
@@ -296,6 +473,66 @@ unset($service);
             </div>
         </div>
     </section>
+
+    <!-- ── Verification Modal ── -->
+    <div id="verifyModal" role="dialog" aria-modal="true" aria-labelledby="vmTitle">
+        <div class="vm-box">
+            <div class="vm-header">
+                <button class="vm-close-btn" id="vmCloseBtn" title="Cancel">&times;</button>
+                <div class="vm-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3 id="vmTitle">Verify Your Email</h3>
+                <p>We sent a 6-digit code to your email address.</p>
+            </div>
+            <div class="vm-body">
+                <!-- Alert area -->
+                <div class="vm-alert" id="vmAlert"></div>
+
+                <!-- Email display -->
+                <div class="vm-email-display">
+                    <i class="fas fa-envelope"></i>
+                    <span id="vmEmailDisplay">—</span>
+                </div>
+
+                <!-- Digit inputs -->
+                <span class="vm-code-label">Enter 6-digit code</span>
+                <div class="vm-digit-row" id="vmDigitRow">
+                    <input class="vm-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code" id="vd0">
+                    <input class="vm-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="vd1">
+                    <input class="vm-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="vd2">
+                    <input class="vm-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="vd3">
+                    <input class="vm-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="vd4">
+                    <input class="vm-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="vd5">
+                </div>
+
+                <!-- Progress dots -->
+                <div class="vm-progress" id="vmProgress">
+                    <div class="vm-prog-dot" id="vp0"></div>
+                    <div class="vm-prog-dot" id="vp1"></div>
+                    <div class="vm-prog-dot" id="vp2"></div>
+                    <div class="vm-prog-dot" id="vp3"></div>
+                    <div class="vm-prog-dot" id="vp4"></div>
+                    <div class="vm-prog-dot" id="vp5"></div>
+                </div>
+
+                <!-- Countdown timer -->
+                <div class="vm-timer" id="vmTimer">
+                    Code expires in <strong id="vmCountdown">10:00</strong>
+                </div>
+
+                <!-- Verify button -->
+                <button class="vm-submit-btn" id="vmVerifyBtn" disabled>
+                    <i class="fas fa-check-circle" style="margin-right:.4rem;"></i>Verify &amp; Send Message
+                </button>
+
+                <!-- Resend -->
+                <div class="vm-resend">
+                    Didn't receive the code?
+                    <button id="vmResendBtn" disabled>Resend Code</button>
+                    <span id="vmResendTimer"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ── Footer ── -->
     <footer>
@@ -333,67 +570,50 @@ unset($service);
     <script>
     (function () {
 
-        /* ── 1. Navbar scroll effect + active link ── */
+        /* ══════════════════════════════════════════════════════
+           1. Navbar scroll effect + active link
+        ══════════════════════════════════════════════════════ */
         var header   = document.getElementById('mainHeader');
         var sections = document.querySelectorAll('section[id]');
         var navLinks = document.querySelectorAll('.navbar-nav .nav-link[data-section]');
 
         function updateNav() {
-            if (window.scrollY > 40) header.classList.add('scrolled');
-            else header.classList.remove('scrolled');
-
+            header.classList.toggle('scrolled', window.scrollY > 40);
             var current = '';
-            sections.forEach(function (sec) {
-                if (window.scrollY >= sec.offsetTop - 110) current = sec.id;
-            });
-            navLinks.forEach(function (link) {
-                link.classList.toggle('active-link', link.getAttribute('data-section') === current);
-            });
+            sections.forEach(function (s) { if (window.scrollY >= s.offsetTop - 110) current = s.id; });
+            navLinks.forEach(function (l) { l.classList.toggle('active-link', l.getAttribute('data-section') === current); });
         }
         window.addEventListener('scroll', updateNav, { passive: true });
         updateNav();
 
-        /* ── 2. Scroll-reveal ── */
-        var revealObs = new IntersectionObserver(function (entries) {
-            entries.forEach(function (e) {
-                if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
-            });
+        /* ══════════════════════════════════════════════════════
+           2. Scroll-reveal
+        ══════════════════════════════════════════════════════ */
+        var revObs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
         }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(function (el) { revealObs.observe(el); });
+        document.querySelectorAll('.reveal').forEach(function (el) { revObs.observe(el); });
 
-        /* ── 3. Animated counters ── */
-        var counted  = false;
-        var statsEl  = document.getElementById('stats');
+        /* ══════════════════════════════════════════════════════
+           3. Animated counters
+        ══════════════════════════════════════════════════════ */
+        var counted = false, statsEl = document.getElementById('stats');
         if (statsEl) {
-            new IntersectionObserver(function (entries) {
-                if (entries[0].isIntersecting && !counted) {
+            new IntersectionObserver(function (e) {
+                if (e[0].isIntersecting && !counted) {
                     counted = true;
                     document.querySelectorAll('.counter').forEach(function (c) {
-                        var target = parseInt(c.getAttribute('data-target'));
-                        var step   = Math.ceil(target / 50);
-                        var n = 0;
-                        var t = setInterval(function () {
-                            n += step;
-                            if (n >= target) { n = target; clearInterval(t); }
-                            c.textContent = n;
-                        }, 28);
+                        var target = parseInt(c.getAttribute('data-target')), n = 0, step = Math.ceil(target / 50);
+                        var t = setInterval(function () { n += step; if (n >= target) { n = target; clearInterval(t); } c.textContent = n; }, 28);
                     });
                 }
             }, { threshold: .4 }).observe(statsEl);
         }
 
-        /* ── 4. Contact form submit state ── */
-        var form = document.getElementById('contactForm');
-        var btn  = document.getElementById('submitBtn');
-        if (form) {
-            form.addEventListener('submit', function () {
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:.5rem;"></i>Sending…';
-                btn.disabled = true;
-            });
-        }
-
-        /* ── 5. Service Modal ── */
-        var modal      = document.getElementById('svcModal');
+        /* ══════════════════════════════════════════════════════
+           4. Service Modal
+        ══════════════════════════════════════════════════════ */
+        var svcModal   = document.getElementById('svcModal');
         var slidesWrap = document.getElementById('svcmSlides');
         var dotsWrap   = document.getElementById('svcmDots');
         var titleEl    = document.getElementById('svcmTitle');
@@ -402,63 +622,324 @@ unset($service);
 
         document.querySelectorAll('#services .service-card').forEach(function (card) {
             card.addEventListener('click', function () {
-                openModal(
-                    card.getAttribute('data-name'),
-                    card.getAttribute('data-desc'),
-                    JSON.parse(card.getAttribute('data-imgs') || '[]')
-                );
+                openSvcModal(card.getAttribute('data-name'), card.getAttribute('data-desc'),
+                             JSON.parse(card.getAttribute('data-imgs') || '[]'));
             });
             card.addEventListener('keypress', function (e) { if (e.key === 'Enter') card.click(); });
         });
 
-        function openModal(name, desc, images) {
-            titleEl.textContent = name;
-            descEl.textContent  = desc;
+        function openSvcModal(name, desc, images) {
+            titleEl.textContent = name; descEl.textContent = desc;
             slidesWrap.innerHTML = ''; dotsWrap.innerHTML = '';
             cur = 0; tot = images.length;
-
-            if (!tot) {
-                slidesWrap.innerHTML = '<div class="svcm-no-img"><i class="fas fa-hard-hat"></i></div>';
-            } else {
+            if (!tot) { slidesWrap.innerHTML = '<div class="svcm-no-img"><i class="fas fa-hard-hat"></i></div>'; }
+            else {
                 images.forEach(function (src, i) {
-                    var s = document.createElement('div');
-                    s.className = 'svcm-slide' + (i === 0 ? ' on' : '');
+                    var s = document.createElement('div'); s.className = 'svcm-slide' + (i === 0 ? ' on' : '');
                     var img = document.createElement('img'); img.src = src; img.alt = name;
                     s.appendChild(img); slidesWrap.appendChild(s);
                     if (tot > 1) {
-                        var d = document.createElement('button');
-                        d.className = 'svcm-dot' + (i === 0 ? ' on' : '');
+                        var d = document.createElement('button'); d.className = 'svcm-dot' + (i === 0 ? ' on' : '');
                         d.setAttribute('aria-label', 'Image ' + (i + 1));
-                        (function (idx) { d.addEventListener('click', function () { goTo(idx); }); }(i));
+                        (function (idx) { d.addEventListener('click', function () { svcGoTo(idx); }); }(i));
                         dotsWrap.appendChild(d);
                     }
                 });
             }
-            modal.classList.add('open');
-            document.body.style.overflow = 'hidden';
+            svcModal.classList.add('open'); document.body.style.overflow = 'hidden';
             clearInterval(tmr);
-            if (tot > 1) tmr = setInterval(function () { goTo((cur + 1) % tot); }, 3000);
+            if (tot > 1) tmr = setInterval(function () { svcGoTo((cur + 1) % tot); }, 3000);
         }
-
-        function goTo(idx) {
-            var ss = slidesWrap.querySelectorAll('.svcm-slide');
-            var ds = dotsWrap.querySelectorAll('.svcm-dot');
+        function svcGoTo(idx) {
+            var ss = slidesWrap.querySelectorAll('.svcm-slide'), ds = dotsWrap.querySelectorAll('.svcm-dot');
             if (!ss.length) return;
             ss[cur].classList.remove('on'); if (ds[cur]) ds[cur].classList.remove('on');
-            cur = idx;
-            ss[cur].classList.add('on');    if (ds[cur]) ds[cur].classList.add('on');
+            cur = idx; ss[cur].classList.add('on'); if (ds[cur]) ds[cur].classList.add('on');
+        }
+        function closeSvcModal() { svcModal.classList.remove('open'); document.body.style.overflow = ''; clearInterval(tmr); }
+        document.getElementById('svcmCloseBtn').addEventListener('click', closeSvcModal);
+        document.getElementById('svcmQuoteBtn').addEventListener('click', closeSvcModal);
+        svcModal.addEventListener('click', function (e) { if (e.target === svcModal) closeSvcModal(); });
+
+        /* ══════════════════════════════════════════════════════
+           5. VERIFICATION MODAL
+        ══════════════════════════════════════════════════════ */
+        var verifyModal   = document.getElementById('verifyModal');
+        var vmEmailDisplay= document.getElementById('vmEmailDisplay');
+        var vmAlert       = document.getElementById('vmAlert');
+        var vmVerifyBtn   = document.getElementById('vmVerifyBtn');
+        var vmResendBtn   = document.getElementById('vmResendBtn');
+        var vmResendTimer = document.getElementById('vmResendTimer');
+        var vmCountdown   = document.getElementById('vmCountdown');
+        var vmTimerEl     = document.getElementById('vmTimer');
+        var digits        = [document.getElementById('vd0'), document.getElementById('vd1'),
+                             document.getElementById('vd2'), document.getElementById('vd3'),
+                             document.getElementById('vd4'), document.getElementById('vd5')];
+        var progDots      = [document.getElementById('vp0'), document.getElementById('vp1'),
+                             document.getElementById('vp2'), document.getElementById('vp3'),
+                             document.getElementById('vp4'), document.getElementById('vp5')];
+
+        // Saved form data (set when user submits contact form)
+        var savedFormData = null;
+
+        // Countdown timers
+        var countdownInterval  = null;
+        var resendInterval     = null;
+        var countdownSeconds   = 0;
+
+        // ── Digit input wiring ──────────────────────────────────────────────
+        digits.forEach(function (inp, i) {
+            inp.addEventListener('input', function () {
+                // allow only digits
+                inp.value = inp.value.replace(/[^0-9]/g, '').slice(-1);
+                progDots[i].classList.toggle('filled', inp.value !== '');
+                inp.classList.toggle('filled', inp.value !== '');
+                inp.classList.remove('error');
+                if (inp.value && i < 5) digits[i + 1].focus();
+                updateVerifyBtn();
+            });
+            inp.addEventListener('keydown', function (e) {
+                if (e.key === 'Backspace' && !inp.value && i > 0) {
+                    digits[i - 1].value = '';
+                    progDots[i - 1].classList.remove('filled');
+                    digits[i - 1].classList.remove('filled');
+                    digits[i - 1].focus();
+                    updateVerifyBtn();
+                }
+                // Allow paste
+                if (e.key === 'v' && (e.ctrlKey || e.metaKey)) return;
+            });
+            inp.addEventListener('paste', function (e) {
+                e.preventDefault();
+                var pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '').slice(0, 6);
+                pasted.split('').forEach(function (ch, j) {
+                    if (digits[j]) {
+                        digits[j].value = ch;
+                        progDots[j].classList.add('filled');
+                        digits[j].classList.add('filled');
+                    }
+                });
+                if (pasted.length < 6 && digits[pasted.length]) digits[pasted.length].focus();
+                else if (digits[5]) digits[5].focus();
+                updateVerifyBtn();
+            });
+        });
+
+        function updateVerifyBtn() {
+            var code = getCode();
+            vmVerifyBtn.disabled = (code.length !== 6 || countdownSeconds <= 0);
         }
 
-        function closeModal() {
-            modal.classList.remove('open');
+        function getCode() {
+            return digits.map(function (d) { return d.value; }).join('');
+        }
+
+        function clearDigits() {
+            digits.forEach(function (d, i) {
+                d.value = '';
+                d.classList.remove('filled', 'error');
+                progDots[i].classList.remove('filled');
+            });
+            vmVerifyBtn.disabled = true;
+        }
+
+        function shakeDigits() {
+            digits.forEach(function (d) { d.classList.add('error'); });
+            setTimeout(function () { digits.forEach(function (d) { d.classList.remove('error'); }); }, 500);
+        }
+
+        // ── Alert helper ────────────────────────────────────────────────────
+        function showVmAlert(msg, type) {
+            vmAlert.className = 'vm-alert show ' + type;
+            vmAlert.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle') + '"></i> ' + msg;
+        }
+        function hideVmAlert() { vmAlert.className = 'vm-alert'; vmAlert.innerHTML = ''; }
+
+        // ── Countdown (10 minutes = 600s) ───────────────────────────────────
+        function startCountdown(seconds) {
+            clearInterval(countdownInterval);
+            countdownSeconds = seconds;
+            updateVerifyBtn();
+            countdownInterval = setInterval(function () {
+                countdownSeconds--;
+                var m = Math.floor(countdownSeconds / 60);
+                var s = countdownSeconds % 60;
+                vmCountdown.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+                if (countdownSeconds <= 0) {
+                    clearInterval(countdownInterval);
+                    vmTimerEl.classList.add('expired');
+                    vmCountdown.textContent = 'Expired';
+                    vmVerifyBtn.disabled = true;
+                    showVmAlert('Code expired. Please request a new one.', 'error');
+                }
+            }, 1000);
+        }
+
+        // ── Resend cooldown (60s) ────────────────────────────────────────────
+        function startResendCooldown() {
+            vmResendBtn.disabled = true;
+            var secs = 60;
+            vmResendTimer.textContent = ' (' + secs + 's)';
+            resendInterval = setInterval(function () {
+                secs--;
+                vmResendTimer.textContent = ' (' + secs + 's)';
+                if (secs <= 0) {
+                    clearInterval(resendInterval);
+                    vmResendBtn.disabled = false;
+                    vmResendTimer.textContent = '';
+                }
+            }, 1000);
+        }
+
+        // ── Open / close modal ───────────────────────────────────────────────
+        function openVerifyModal(email) {
+            vmEmailDisplay.textContent = email;
+            clearDigits();
+            hideVmAlert();
+            vmTimerEl.classList.remove('expired');
+            vmCountdown.textContent = '10:00';
+            startCountdown(600);
+            startResendCooldown();
+            verifyModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            setTimeout(function () { digits[0].focus(); }, 300);
+        }
+
+        function closeVerifyModal() {
+            verifyModal.classList.remove('open');
             document.body.style.overflow = '';
-            clearInterval(tmr);
+            clearInterval(countdownInterval);
+            clearInterval(resendInterval);
         }
 
-        document.getElementById('svcmCloseBtn').addEventListener('click', closeModal);
-        document.getElementById('svcmQuoteBtn').addEventListener('click', closeModal);
-        modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+        document.getElementById('vmCloseBtn').addEventListener('click', closeVerifyModal);
+        verifyModal.addEventListener('click', function (e) { if (e.target === verifyModal) closeVerifyModal(); });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeVerifyModal();
+                closeSvcModal();
+            }
+        });
+
+        // ── Send OTP to backend ─────────────────────────────────────────────
+        function sendOTP(email, onSuccess, onError) {
+            var fd = new FormData();
+            fd.append('email', email);
+            fetch('backend/send_verification.php', { method: 'POST', body: fd })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.success) onSuccess(data);
+                    else onError(data.message);
+                })
+                .catch(function () { onError('Network error. Please try again.'); });
+        }
+
+        // ── Contact form submit handler ─────────────────────────────────────
+        var contactForm = document.getElementById('contactForm');
+        var submitBtn   = document.getElementById('submitBtn');
+
+        contactForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var name    = document.getElementById('cf_name').value.trim();
+            var email   = document.getElementById('cf_email').value.trim();
+            var message = document.getElementById('cf_message').value.trim();
+
+            // Basic client-side validation
+            if (!name) { document.getElementById('cf_name').focus(); return; }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('cf_email').focus(); return;
+            }
+            if (!message) { document.getElementById('cf_message').focus(); return; }
+
+            // Save form data for later submission
+            savedFormData = new FormData(contactForm);
+
+            // Disable button while sending
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:.5rem;"></i>Sending code…';
+            submitBtn.disabled = true;
+
+            sendOTP(email,
+                function (data) {
+                    // Success: open verification modal
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:.5rem;"></i>Send Message';
+                    submitBtn.disabled = false;
+                    openVerifyModal(email);
+                },
+                function (errMsg) {
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:.5rem;"></i>Send Message';
+                    submitBtn.disabled = false;
+                    // Show inline error
+                    var existing = document.getElementById('otpSendError');
+                    if (!existing) {
+                        existing = document.createElement('div');
+                        existing.id = 'otpSendError';
+                        existing.className = 'alert alert-danger';
+                        existing.style.marginBottom = '1rem';
+                        contactForm.insertBefore(existing, contactForm.firstChild);
+                    }
+                    existing.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + errMsg;
+                    setTimeout(function () { if (existing.parentNode) existing.parentNode.removeChild(existing); }, 6000);
+                }
+            );
+        });
+
+        // ── Resend OTP ──────────────────────────────────────────────────────
+        vmResendBtn.addEventListener('click', function () {
+            var email = document.getElementById('cf_email').value.trim();
+            hideVmAlert();
+            clearDigits();
+            vmTimerEl.classList.remove('expired');
+            vmCountdown.textContent = '10:00';
+            showVmAlert('Sending a new code…', 'info');
+
+            sendOTP(email,
+                function () {
+                    showVmAlert('New code sent! Check your inbox.', 'success');
+                    startCountdown(600);
+                    startResendCooldown();
+                    setTimeout(function () { hideVmAlert(); }, 4000);
+                    digits[0].focus();
+                },
+                function (msg) { showVmAlert(msg, 'error'); }
+            );
+        });
+
+        // ── Verify button: submit form with OTP ─────────────────────────────
+        vmVerifyBtn.addEventListener('click', function () {
+            var code = getCode();
+            if (code.length !== 6) return;
+
+            vmVerifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:.4rem;"></i>Verifying…';
+            vmVerifyBtn.disabled = true;
+
+            // Append OTP code to form data and POST
+            if (!savedFormData) {
+                showVmAlert('Form data lost. Please close and re-submit the form.', 'error');
+                vmVerifyBtn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:.4rem;"></i>Verify & Send Message';
+                vmVerifyBtn.disabled = false;
+                return;
+            }
+
+            var fd = new FormData();
+            // Copy all original form fields
+            for (var pair of savedFormData.entries()) { fd.append(pair[0], pair[1]); }
+            fd.append('otp_code', code);
+
+            fetch('backend/submit_contact.php', { method: 'POST', body: fd, redirect: 'manual' })
+                .then(function (r) {
+                    // submit_contact.php redirects — treat any response as success
+                    // (it sets a session alert and redirects to index.php#contact)
+                    closeVerifyModal();
+                    window.location.href = 'index.php#contact';
+                })
+                .catch(function () {
+                    shakeDigits();
+                    showVmAlert('Something went wrong. Please try again.', 'error');
+                    vmVerifyBtn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:.4rem;"></i>Verify & Send Message';
+                    vmVerifyBtn.disabled = false;
+                });
+        });
 
     }());
     </script>
