@@ -1,13 +1,13 @@
 /* NAM Builders - Main Stylesheet */
 
 :root {
-    --primary-color: #FF5722;
-    --primary-dark: #E64A19;
-    --secondary-color: #2C3E50;
-    --light-bg: #F8F9FA;
-    --border-color: #E0E0E0;
-    --text-dark: #333333;
-    --text-light: #666666;
+    --primary-color: #1565C0;       /* Deep blue */
+    --primary-dark: #0D47A1;        /* Darker blue */
+    --secondary-color: #0A0A0A;     /* Near black */
+    --light-bg: #F0F4FA;            /* Light blue-white */
+    --border-color: #CFD8E3;
+    --text-dark: #0A0A0A;
+    --text-light: #4A5568;
     --success-color: #28A745;
     --danger-color: #DC3545;
     --warning-color: #FFC107;
@@ -106,11 +106,13 @@ header {
     color: white;
     text-decoration: none;
 }
-
+.feature-icon {
+    background-color: #DBEAFE;  /* light blue tint */
+}
 /* Hero Section */
 .hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://via.placeholder.com/1200x600') center/cover;
-    height: 500px;
+    background: linear-gradient(rgba(10, 10, 10, 0.65), rgba(21, 101, 192, 0.55)), url('...') center/cover;
+    height: 5000px;
     display: flex;
     align-items: center;
     justify-content: center;

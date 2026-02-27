@@ -2,6 +2,14 @@
 // Services Management Page
 $services = getAllServices($conn, false);
 displayAlert();
+
+// For each service, get their images
+foreach ($services as &$service) {
+    $sid = $service['id'];
+    $img_result = $conn->query("SELECT * FROM service_images WHERE service_id = $sid ORDER BY sort_order ASC");
+    $service['images'] = $img_result ? $img_result->fetch_all(MYSQLI_ASSOC) : [];
+}
+unset($service);
 ?>
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
@@ -19,7 +27,7 @@ displayAlert();
                 <tr>
                     <th>ID</th>
                     <th>Service Name</th>
-                    <th>Image</th>
+                    <th>Images</th>
                     <th>Description</th>
                     <th>Status</th>
                     <th>Order</th>
@@ -33,10 +41,24 @@ displayAlert();
                         <td><?php echo $service['id']; ?></td>
                         <td><?php echo sanitize($service['service_name']); ?></td>
                         <td>
-                            <?php if (!empty($service['image_path']) && file_exists(UPLOADS_PATH . $service['image_path'])): ?>
-                                <img src="<?php echo UPLOADS_URL . $service['image_path']; ?>" alt="Service" style="max-height: 50px; max-width: 50px;">
+                            <?php if (!empty($service['images'])): ?>
+                                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                                    <?php foreach ($service['images'] as $img): ?>
+                                        <div style="position: relative; display: inline-block;">
+                                            <img src="<?php echo UPLOADS_URL . $img['image_path']; ?>" 
+                                                 alt="Service" 
+                                                 style="height: 40px; width: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #eee;">
+                                            <button onclick="deleteServiceImage(<?php echo $img['id']; ?>, this)" 
+                                                    style="position: absolute; top: -6px; right: -6px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 16px; height: 16px; font-size: 9px; cursor: pointer; line-height: 16px; padding: 0;"
+                                                    title="Remove image">×</button>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <small style="color: var(--text-light);"><?php echo count($service['images']); ?> image(s)</small>
+                            <?php elseif (!empty($service['image_path']) && file_exists(UPLOADS_PATH . $service['image_path'])): ?>
+                                <img src="<?php echo UPLOADS_URL . $service['image_path']; ?>" alt="Service" style="max-height: 40px; max-width: 40px;">
                             <?php else: ?>
-                                <span style="color: var(--text-light);">No image</span>
+                                <span style="color: var(--text-light);">No images</span>
                             <?php endif; ?>
                         </td>
                         <td><?php echo substr(sanitize($service['description']), 0, 50) . '...'; ?></td>
@@ -70,7 +92,7 @@ displayAlert();
 
 <!-- Add/Edit Service Modal -->
 <div class="modal-overlay" id="serviceModal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 580px; max-height: 90vh; overflow-y: auto;">
         <div class="modal-header">
             <h2 id="modalTitle">Add New Service</h2>
             <button class="modal-close" onclick="closeServiceModal()">&times;</button>
@@ -89,9 +111,19 @@ displayAlert();
             </div>
 
             <div class="form-group">
-                <label for="serviceImage">Service Image</label>
-                <input type="file" id="serviceImage" name="service_image" class="form-control" accept="image/*">
-                <small style="color: var(--text-light);">Formats: JPG, PNG, GIF. Max size: 5MB</small>
+                <label for="serviceImages">Service Images <small style="color: var(--text-light); font-weight: normal;">(select multiple)</small></label>
+                <input type="file" id="serviceImages" name="service_images[]" class="form-control" 
+                       accept="image/*" multiple onchange="previewNewImages(this)">
+                <small style="color: var(--text-light);">Formats: JPG, PNG, GIF, WEBP. Max 5MB each. When editing, new uploads are added to existing images.</small>
+            </div>
+
+            <!-- Preview of newly selected images -->
+            <div id="newImagesPreview" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem;"></div>
+
+            <!-- Existing images (shown when editing) -->
+            <div id="existingImagesSection" style="display: none; margin-bottom: 1rem;">
+                <label style="font-weight: 600; color: var(--text-dark); display: block; margin-bottom: 0.5rem;">Current Images</label>
+                <div id="existingImagesGrid" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
             </div>
 
             <div class="form-group">
@@ -119,11 +151,34 @@ function openAddServiceModal() {
     document.getElementById('modalTitle').innerText = 'Add New Service';
     document.getElementById('serviceForm').reset();
     document.getElementById('serviceId').value = '';
+    document.getElementById('newImagesPreview').innerHTML = '';
+    document.getElementById('existingImagesSection').style.display = 'none';
+    document.getElementById('existingImagesGrid').innerHTML = '';
     document.getElementById('serviceModal').classList.add('active');
 }
 
 function closeServiceModal() {
     document.getElementById('serviceModal').classList.remove('active');
+}
+
+function previewNewImages(input) {
+    const preview = document.getElementById('newImagesPreview');
+    preview.innerHTML = '';
+    if (input.files && input.files.length > 0) {
+        Array.from(input.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.style.cssText = 'position:relative;';
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.cssText = 'width:70px;height:70px;object-fit:cover;border-radius:6px;border:2px solid var(--primary-color);';
+                div.appendChild(img);
+                preview.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
 }
 
 function editService(id) {
@@ -138,13 +193,57 @@ function editService(id) {
                 document.getElementById('serviceDescription').value = service.description;
                 document.getElementById('serviceOrder').value = service.sort_order;
                 document.getElementById('serviceActive').checked = service.is_active == 1;
+                document.getElementById('newImagesPreview').innerHTML = '';
+
+                // Show existing images
+                const existingSection = document.getElementById('existingImagesSection');
+                const existingGrid = document.getElementById('existingImagesGrid');
+                existingGrid.innerHTML = '';
+
+                const images = service.images || [];
+                if (images.length > 0) {
+                    existingSection.style.display = 'block';
+                    images.forEach(img => {
+                        const div = document.createElement('div');
+                        div.style.cssText = 'position:relative;display:inline-block;';
+                        div.id = 'img-wrapper-' + img.id;
+                        div.innerHTML = `
+                            <img src="<?php echo UPLOADS_URL; ?>${img.image_path}" 
+                                 style="width:70px;height:70px;object-fit:cover;border-radius:6px;border:1px solid #ddd;">
+                            <button type="button" onclick="deleteServiceImage(${img.id}, this)" 
+                                    style="position:absolute;top:-6px;right:-6px;background:#dc3545;color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:11px;cursor:pointer;line-height:18px;padding:0;"
+                                    title="Remove">×</button>
+                        `;
+                        existingGrid.appendChild(div);
+                    });
+                } else {
+                    existingSection.style.display = 'none';
+                }
+
                 document.getElementById('serviceModal').classList.add('active');
             }
         });
 }
 
+function deleteServiceImage(imgId, btn) {
+    if (!confirm('Remove this image?')) return;
+    fetch('../backend/delete_service_image.php?id=' + imgId)
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                const wrapper = document.getElementById('img-wrapper-' + imgId);
+                if (wrapper) wrapper.remove();
+                // Also remove from table thumbnail
+                const tableThumbs = document.querySelectorAll('[data-img-id="' + imgId + '"]');
+                tableThumbs.forEach(t => t.parentElement.remove());
+            } else {
+                alert('Failed to delete image: ' + data.message);
+            }
+        });
+}
+
 function deleteService(id) {
-    if (confirm('Are you sure you want to delete this service?')) {
+    if (confirm('Are you sure you want to delete this service and all its images?')) {
         window.location.href = '../backend/delete_service.php?id=' + id;
     }
 }
@@ -167,10 +266,7 @@ function submitServiceForm(event) {
     });
 }
 
-// Close modal when clicking outside
 document.getElementById('serviceModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeServiceModal();
-    }
+    if (e.target === this) closeServiceModal();
 });
 </script>

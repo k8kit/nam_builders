@@ -14,6 +14,9 @@ if ($id <= 0) {
 $service = getServiceById($conn, $id);
 
 if ($service) {
+    // Get all images for this service
+    $img_result = $conn->query("SELECT * FROM service_images WHERE service_id = $id ORDER BY sort_order ASC");
+    $service['images'] = $img_result ? $img_result->fetch_all(MYSQLI_ASSOC) : [];
     jsonResponse(true, 'Service found', $service);
 } else {
     jsonResponse(false, 'Service not found');

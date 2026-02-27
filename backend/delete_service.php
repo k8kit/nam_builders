@@ -2,7 +2,6 @@
 require_once '../config/database.php';
 require_once '../includes/functions.php';
 
-// Check if user is logged in
 requireLogin();
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -21,12 +20,23 @@ if (!$service) {
     exit();
 }
 
-// Delete image file
-if ($service['image_path']) {
+// Delete all associated images from disk
+$img_result = $conn->query("SELECT image_path FROM service_images WHERE service_id = $id");
+if ($img_result) {
+    while ($img = $img_result->fetch_assoc()) {
+        deleteFile(UPLOADS_PATH . $img['image_path']);
+    }
+}
+
+// Delete from service_images (FK cascade would handle this too, but be explicit)
+$conn->query("DELETE FROM service_images WHERE service_id = $id");
+
+// Also delete legacy single image_path if exists
+if (!empty($service['image_path'])) {
     deleteFile(UPLOADS_PATH . $service['image_path']);
 }
 
-// Delete from database
+// Delete from services
 $query = "DELETE FROM services WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $id);

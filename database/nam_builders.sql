@@ -76,3 +76,18 @@ INSERT INTO clients (client_name, description, sort_order, is_active) VALUES
 ('Client 6', 'Client Logo 6', 6, 1),
 ('Client 7', 'Client Logo 7', 7, 1),
 ('Client 8', 'Client Logo 8', 8, 1);
+
+-- Migration: Add service_images table for multiple images per service
+-- Run this against your nam_builders database
+
+CREATE TABLE IF NOT EXISTS service_images (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    service_id INT NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
+    sort_order INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE
+);
+
+-- Index for fast lookups by service
+CREATE INDEX idx_service_images_service_id ON service_images(service_id);
