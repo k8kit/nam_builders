@@ -2,16 +2,13 @@
 require_once 'config/database.php';
 require_once 'includes/functions.php';
 
-// Get all active services and clients
 $services = getAllServices($conn, true);
 $clients  = getAllClients($conn, true);
 
-// For each service, get its images from service_images table
 foreach ($services as &$service) {
     $sid = intval($service['id']);
     $img_result = $conn->query("SELECT * FROM service_images WHERE service_id = $sid ORDER BY sort_order ASC");
     $service['images'] = $img_result ? $img_result->fetch_all(MYSQLI_ASSOC) : [];
-    // Fallback: if no multi-images, use legacy image_path
     if (empty($service['images']) && !empty($service['image_path'])) {
         $service['images'] = [['image_path' => $service['image_path']]];
     }
@@ -25,236 +22,128 @@ unset($service);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NAM Builders and Supply Corp - Building Excellence, Delivering Quality</title>
     <meta name="description" content="Complete construction and industrial solutions for residential, commercial, and industrial projects.">
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-
     <style>
-        /* ── Service Cards (image + name only) ── */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem;
+        /* ── Service Cards ── */
+        #services .services-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+            gap: 1.5rem !important;
+        }
+        #services .service-card {
+            background: #fff !important;
+            border-radius: 10px !important;
+            overflow: hidden !important;
+            border: 1px solid var(--border-color) !important;
+            cursor: pointer !important;
+            transition: transform .25s, box-shadow .25s !important;
+            position: relative !important;
+        }
+        #services .service-card:hover {
+            transform: translateY(-6px) !important;
+            box-shadow: 0 12px 32px rgba(0,0,0,.15) !important;
+        }
+        #services .service-card:hover .svc-overlay { opacity: 1 !important; }
+        #services .service-image {
+            width: 100% !important; height: 185px !important;
+            background: var(--light-bg) !important;
+            display: flex !important; align-items: center !important;
+            justify-content: center !important; overflow: hidden !important;
+            position: relative !important;
+        }
+        #services .service-image img {
+            width: 100% !important; height: 100% !important; object-fit: cover !important;
+        }
+        .svc-overlay {
+            position: absolute !important; inset: 0 !important;
+            background: rgba(21,101,192,.25) !important;
+            display: flex !important; align-items: center !important;
+            justify-content: center !important; opacity: 0 !important;
+            transition: opacity .25s !important; pointer-events: none !important; z-index: 2 !important;
+        }
+        .svc-overlay i { font-size: 2.2rem !important; color: #fff !important; text-shadow: 0 2px 8px rgba(0,0,0,.5) !important; }
+        .svc-name-bar {
+            padding: .85rem 1rem !important; font-weight: 600 !important;
+            font-size: .95rem !important; color: var(--text-dark) !important;
+            background: #fff !important; text-align: center !important;
+        }
+        #services .service-content { display: none !important; }
+        .svc-img-placeholder {
+            width: 70px; height: 70px; border: 3px solid var(--border-color);
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; color: var(--border-color); font-size: 2rem;
         }
 
-        .service-card {
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: transform .25s ease, box-shadow .25s ease;
-            position: relative;
+        /* ── Service Modal ── */
+        #svcModal {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,.7); z-index: 9999;
+            align-items: center; justify-content: center; padding: 1rem;
         }
-        .service-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 32px rgba(0,0,0,.12);
+        #svcModal.open { display: flex !important; }
+        .svcm-box {
+            background: #fff; border-radius: 14px; max-width: 830px; width: 100%;
+            box-shadow: 0 24px 70px rgba(0,0,0,.35); overflow: hidden;
+            display: flex; flex-direction: row; max-height: 88vh; position: relative;
         }
-        .service-card:hover .service-overlay {
-            opacity: 1;
+        .svcm-left { flex: 0 0 55%; background: #111; position: relative; min-height: 400px; }
+        .svcm-slides { position: relative; width: 100%; height: 100%; min-height: 400px; overflow: hidden; }
+        .svcm-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .55s; }
+        .svcm-slide.on { opacity: 1; }
+        .svcm-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .svcm-no-img {
+            width: 100%; height: 100%; min-height: 400px;
+            display: flex; align-items: center; justify-content: center;
+            color: #555; font-size: 4rem;
         }
-
-        .service-image {
-            width: 100%;
-            height: 180px;
-            background: var(--light-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
+        .svcm-dots {
+            position: absolute; bottom: 14px; left: 0; right: 0;
+            display: flex; justify-content: center; gap: 7px; z-index: 10;
         }
-        .service-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .svcm-dot {
+            width: 9px; height: 9px; border-radius: 50%;
+            background: rgba(255,255,255,.45); border: none; padding: 0; cursor: pointer;
+            transition: background .25s, transform .2s;
         }
-        .service-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(255,87,34,.18);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity .25s ease;
+        .svcm-dot.on { background: #fff; transform: scale(1.2); }
+        .svcm-close {
+            position: absolute; top: 12px; right: 12px;
+            background: rgba(0,0,0,.5); color: #fff; border: none;
+            border-radius: 50%; width: 36px; height: 36px; font-size: 1.25rem;
+            line-height: 36px; text-align: center; cursor: pointer; z-index: 20;
         }
-        .service-overlay i {
-            font-size: 2.2rem;
-            color: #fff;
-            text-shadow: 0 2px 8px rgba(0,0,0,.4);
+        .svcm-close:hover { background: rgba(0,0,0,.75); }
+        .svcm-right { flex: 1; display: flex; flex-direction: column; padding: 2.2rem 2rem; overflow-y: auto; }
+        .svcm-title { font-size: 1.55rem; font-weight: 700; color: var(--text-dark); margin: 0 0 .9rem; }
+        .svcm-bar { width: 42px; height: 4px; background: var(--primary-color); border-radius: 3px; margin-bottom: 1.3rem; }
+        .svcm-desc { color: var(--text-light); line-height: 1.8; font-size: .97rem; flex: 1; }
+        .svcm-cta { padding-top: 1.8rem; }
+        .svcm-cta a {
+            display: inline-block; background: var(--primary-color); color: #fff;
+            padding: .7rem 1.7rem; border-radius: 6px; font-weight: 600;
+            text-decoration: none; transition: background .2s;
         }
-
-        .service-name-bar {
-            padding: .85rem 1rem;
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--text-dark);
-            background: #fff;
-            text-align: center;
-        }
-
-        /* ── Service Detail Modal ── */
-        #serviceDetailModal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.65);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        #serviceDetailModal.active { display: flex; }
-
-        .sdm-box {
-            background: #fff;
-            border-radius: 14px;
-            max-width: 820px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: row;
-            max-height: 90vh;
-        }
-
-        /* LEFT – image slider */
-        .sdm-left {
-            flex: 0 0 55%;
-            background: #1a1a1a;
-            position: relative;
-            min-height: 380px;
-        }
-        .sdm-slider {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-        .sdm-slide {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity .5s ease;
-        }
-        .sdm-slide.active { opacity: 1; }
-        .sdm-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        /* dot indicators */
-        .sdm-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            z-index: 10;
-        }
-        .sdm-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.5);
-            cursor: pointer;
-            border: none;
-            padding: 0;
-            transition: background .25s;
-        }
-        .sdm-dot.active { background: #fff; }
-
-        /* RIGHT – text content */
-        .sdm-right {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem 1.8rem;
-            overflow-y: auto;
-        }
-        .sdm-close {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: rgba(0,0,0,.45);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 34px;
-            height: 34px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 20;
-            line-height: 34px;
-            text-align: center;
-            transition: background .2s;
-        }
-        .sdm-close:hover { background: rgba(0,0,0,.7); }
-
-        .sdm-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-            line-height: 1.3;
-        }
-        .sdm-divider {
-            width: 40px;
-            height: 3px;
-            background: var(--primary-color);
-            border-radius: 2px;
-            margin-bottom: 1.2rem;
-        }
-        .sdm-desc {
-            color: var(--text-light);
-            line-height: 1.75;
-            font-size: .97rem;
-        }
-        .sdm-cta {
-            margin-top: auto;
-            padding-top: 1.5rem;
-        }
-        .sdm-cta a {
-            display: inline-block;
-            background: var(--primary-color);
-            color: #fff;
-            padding: .65rem 1.5rem;
-            border-radius: 6px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background .2s;
-        }
-        .sdm-cta a:hover { background: var(--primary-dark); color: #fff; }
-
-        /* placeholder when no image */
-        .sdm-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #555;
-            font-size: 3rem;
-        }
-
-        @media (max-width: 640px) {
-            .sdm-box { flex-direction: column; }
-            .sdm-left  { flex: none; min-height: 240px; }
-            .sdm-right { padding: 1.4rem; }
+        .svcm-cta a:hover { background: var(--primary-dark); color: #fff; }
+        @media (max-width: 620px) {
+            .svcm-box { flex-direction: column; max-height: 95vh; }
+            .svcm-left { flex: none; min-height: 230px; }
+            .svcm-slides, .svcm-no-img { min-height: 230px; }
+            .svcm-right { padding: 1.4rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Header / Navigation -->
+
+    <!-- Header -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-lg">
                 <a class="navbar-brand" href="#home">
-                    <img src="uploads/nam-logo.png" alt="NAM Builders and Supply Corp" style="height: 55px; width: auto;">
+                    <img src="uploads/nam-logo.png" alt="NAM Builders" style="height:55px;width:auto;"
+                         onerror="this.outerHTML='<span style=\'display:flex;align-items:center;gap:.5rem;\'><i class=\'fas fa-building\' style=\'color:var(--primary-color);font-size:1.8rem;\'></i><span>NAM Builders and Supply Corp</span></span>'">
+                         <span >NAM Builders and Supply Corp</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
@@ -271,11 +160,11 @@ unset($service);
         </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>Building Excellence, <span class="highlight">Delivering Quality</span></h1>
-            <p>Complete construction and industrial solutions for residential, commercial, and industrial projects. From planning to installation, we deliver reliable and professional services.</p>
+            <p>Complete construction and industrial solutions for residential, commercial, and industrial projects.</p>
             <div class="hero-buttons">
                 <a href="#services" class="btn-primary-main">Our Services</a>
                 <a href="#contact" class="btn-secondary-main">Contact Us</a>
@@ -283,108 +172,99 @@ unset($service);
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About -->
     <section class="light-bg" id="about">
         <div class="container-lg">
-            <div class="section-title">
-                <h2>About NAM Builders</h2>
-            </div>
+            <div class="section-title"><h2>About NAM Builders</h2></div>
             <div class="about-content">
-                <p style="text-align: center; font-size: 1.1rem; color: var(--text-light);">
-                    NAM Builders and Supply Corp is a leading construction and industrial services company providing complete solutions for residential, commercial, and industrial projects. We specialize in general construction, renovation, electrical systems, fire protection, steel fabrication, office fit-outs, and building maintenance. In addition to contracting services, we also supply construction materials, electrical components, PPE, and office supplies. With a strong focus on quality workmanship, safety, and customer satisfaction, NAM Builders delivers reliable, efficient, and professional solutions.
+                <p style="text-align:center;font-size:1.1rem;color:var(--text-light);">
+                    NAM Builders and Supply Corp is a leading construction and industrial services company providing complete solutions for residential, commercial, and industrial projects. We specialize in general construction, renovation, electrical systems, fire protection, steel fabrication, office fit-outs, and building maintenance. In addition to contracting services, we also supply construction materials, electrical components, PPE, and office supplies.
                 </p>
             </div>
-
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
-                    <h3>Quality Workmanship</h3>
-                    <p>Expert craftsmanship in every project we undertake.</p>
+                    <h3>Quality Workmanship</h3><p>Expert craftsmanship in every project we undertake.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>Safety First</h3>
-                    <p>Committed to maintaining the highest safety standards.</p>
+                    <h3>Safety First</h3><p>Committed to maintaining the highest safety standards.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-users"></i></div>
-                    <h3>Customer Satisfaction</h3>
-                    <p>Dedicated to exceeding client expectations.</p>
+                    <h3>Customer Satisfaction</h3><p>Dedicated to exceeding client expectations.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-rocket"></i></div>
-                    <h3>Professional Service</h3>
-                    <p>Reliable and efficient solutions from start to finish.</p>
+                    <h3>Professional Service</h3><p>Reliable and efficient solutions from start to finish.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ══ Services Section ══ -->
+    <!-- Services -->
     <section id="services">
         <div class="container-lg">
             <div class="section-title">
                 <h2>Our Services</h2>
-                <p>Comprehensive construction and industrial solutions tailored to your needs. Click any service to learn more.</p>
+                <p>Comprehensive solutions tailored to your needs. Click any service to learn more.</p>
             </div>
-
             <div class="services-grid">
                 <?php if (!empty($services)): ?>
-                    <?php foreach ($services as $service): 
-                        // Build images JSON for JS
-                        $imgs_json = json_encode(array_map(function($img) {
-                            return UPLOADS_URL . $img['image_path'];
-                        }, $service['images']));
-                        $first_img_url = !empty($service['images']) ? UPLOADS_URL . $service['images'][0]['image_path'] : '';
-                        $name_escaped  = htmlspecialchars($service['service_name'], ENT_QUOTES);
-                        $desc_escaped  = htmlspecialchars($service['description'], ENT_QUOTES);
+                    <?php foreach ($services as $sv):
+                        /* Safe: store all data in data-* attributes as JSON — no JS string escaping issues */
+                        $imgs_array = array_map(fn($i) => UPLOADS_URL . $i['image_path'], $sv['images']);
+                        $data_imgs  = htmlspecialchars(json_encode($imgs_array), ENT_QUOTES, 'UTF-8');
+                        $data_name  = htmlspecialchars($sv['service_name'], ENT_QUOTES, 'UTF-8');
+                        $data_desc  = htmlspecialchars($sv['description'],  ENT_QUOTES, 'UTF-8');
+                        $first_img  = !empty($sv['images']) ? UPLOADS_URL . $sv['images'][0]['image_path'] : '';
                     ?>
-                        <div class="service-card"
-                             onclick="openServiceModal(<?php echo $service['id']; ?>, '<?php echo $name_escaped; ?>', '<?php echo $desc_escaped; ?>', <?php echo $imgs_json; ?>)">
-                            <div class="service-image">
-                                <?php if ($first_img_url): ?>
-                                    <img src="<?php echo $first_img_url; ?>" alt="<?php echo $name_escaped; ?>">
-                                <?php else: ?>
-                                    <div class="service-placeholder"><i class="fas fa-image"></i></div>
-                                <?php endif; ?>
-                                <div class="service-overlay">
-                                    <i class="fas fa-search-plus"></i>
-                                </div>
-                            </div>
-                            <div class="service-name-bar"><?php echo sanitize($service['service_name']); ?></div>
+                    <div class="service-card"
+                         role="button"
+                         tabindex="0"
+                         data-name="<?php echo $data_name; ?>"
+                         data-desc="<?php echo $data_desc; ?>"
+                         data-imgs="<?php echo $data_imgs; ?>">
+                        <div class="service-image">
+                            <?php if ($first_img): ?>
+                                <img src="<?php echo $first_img; ?>" alt="<?php echo $data_name; ?>">
+                            <?php else: ?>
+                                <div class="svc-img-placeholder"><i class="fas fa-image"></i></div>
+                            <?php endif; ?>
+                            <div class="svc-overlay"><i class="fas fa-search-plus"></i></div>
                         </div>
+                        <div class="svc-name-bar"><?php echo htmlspecialchars($sv['service_name']); ?></div>
+                    </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p style="text-align:center; grid-column:1/-1; color:var(--text-light);">No services available at the moment.</p>
+                    <p style="grid-column:1/-1;text-align:center;color:var(--text-light);">No services available.</p>
                 <?php endif; ?>
             </div>
         </div>
     </section>
 
-    <!-- ══ Service Detail Modal ══ -->
-    <div id="serviceDetailModal" onclick="handleModalBackdropClick(event)">
-        <div class="sdm-box">
-            <!-- LEFT: image slider -->
-            <div class="sdm-left">
-                <button class="sdm-close" onclick="closeServiceModal()" title="Close">&times;</button>
-                <div class="sdm-slider" id="sdmSlider">
-                    <!-- slides injected by JS -->
-                </div>
-                <div class="sdm-dots" id="sdmDots"></div>
+    <!-- Service Modal -->
+    <div id="svcModal" role="dialog" aria-modal="true" aria-labelledby="svcmTitle">
+        <div class="svcm-box">
+            <div class="svcm-left">
+                <button class="svcm-close" id="svcmCloseBtn">&times;</button>
+                <div class="svcm-slides" id="svcmSlides"></div>
+                <div class="svcm-dots"   id="svcmDots"></div>
             </div>
-            <!-- RIGHT: info -->
-            <div class="sdm-right">
-                <h2 class="sdm-title" id="sdmTitle"></h2>
-                <div class="sdm-divider"></div>
-                <p class="sdm-desc" id="sdmDesc"></p>
-                <div class="sdm-cta">
-                    <a href="#contact" onclick="closeServiceModal()">Get a Quote</a>
+            <div class="svcm-right">
+                <h2 class="svcm-title" id="svcmTitle"></h2>
+                <div class="svcm-bar"></div>
+                <p  class="svcm-desc"  id="svcmDesc"></p>
+                <div class="svcm-cta">
+                    <a href="#contact" id="svcmQuoteBtn">
+                        <i class="fas fa-paper-plane" style="margin-right:.4rem;"></i>Get a Quote
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Clients Carousel Section -->
+    <!-- Clients -->
     <section class="clients-section light-bg" id="clients">
         <div class="container-lg">
             <div class="section-title">
@@ -416,7 +296,7 @@ unset($service);
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- Contact -->
     <section id="contact">
         <div class="container-lg">
             <div class="section-title">
@@ -429,32 +309,32 @@ unset($service);
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="fullName">Full Name</label>
-                                <input type="text" id="fullName" name="full_name" class="form-control" required>
+                                <label>Full Name</label>
+                                <input type="text" name="full_name" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" class="form-control" required>
+                                <label>Email</label>
+                                <input type="email" name="email" class="form-control" required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <input type="tel" id="phone" name="phone" class="form-control">
+                                <label>Phone</label>
+                                <input type="tel" name="phone" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="service">Service Needed</label>
-                                <select id="service" name="service_needed" class="form-control">
+                                <label>Service Needed</label>
+                                <select name="service_needed" class="form-control">
                                     <option value="">Select a service</option>
-                                    <?php foreach ($services as $service): ?>
-                                        <option value="<?php echo sanitize($service['service_name']); ?>">
-                                            <?php echo sanitize($service['service_name']); ?>
+                                    <?php foreach ($services as $sv): ?>
+                                        <option value="<?php echo htmlspecialchars($sv['service_name']); ?>">
+                                            <?php echo htmlspecialchars($sv['service_name']); ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -462,8 +342,8 @@ unset($service);
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" class="form-control" required></textarea>
+                        <label>Message</label>
+                        <textarea name="message" class="form-control" required></textarea>
                     </div>
                     <button type="submit" class="btn-submit">Send Message</button>
                 </form>
@@ -496,7 +376,7 @@ unset($service);
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 NAM Builders and Supply Corp. All rights reserved.</p>
+                <p>&copy; <?php echo date('Y'); ?> NAM Builders and Supply Corp. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -504,85 +384,86 @@ unset($service);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/carousel.js"></script>
     <script>
-    /* ══ Service Detail Modal Logic ══ */
-    let slideInterval = null;
-    let currentSlide  = 0;
-    let totalSlides   = 0;
+    (function () {
+        var modal      = document.getElementById('svcModal');
+        var slidesWrap = document.getElementById('svcmSlides');
+        var dotsWrap   = document.getElementById('svcmDots');
+        var titleEl    = document.getElementById('svcmTitle');
+        var descEl     = document.getElementById('svcmDesc');
+        var cur = 0, tot = 0, tmr = null;
 
-    function openServiceModal(id, name, desc, images) {
-        document.getElementById('sdmTitle').textContent = name;
-        document.getElementById('sdmDesc').textContent  = desc;
-
-        const slider = document.getElementById('sdmSlider');
-        const dots   = document.getElementById('sdmDots');
-        slider.innerHTML = '';
-        dots.innerHTML   = '';
-        currentSlide = 0;
-        totalSlides  = images.length;
-
-        if (images.length === 0) {
-            slider.innerHTML = '<div class="sdm-placeholder"><i class="fas fa-image"></i></div>';
-        } else {
-            images.forEach(function(src, i) {
-                const slide = document.createElement('div');
-                slide.className = 'sdm-slide' + (i === 0 ? ' active' : '');
-                const img = document.createElement('img');
-                img.src = src;
-                img.alt = name;
-                slide.appendChild(img);
-                slider.appendChild(slide);
-
-                if (images.length > 1) {
-                    const dot = document.createElement('button');
-                    dot.className = 'sdm-dot' + (i === 0 ? ' active' : '');
-                    dot.setAttribute('aria-label', 'Slide ' + (i+1));
-                    dot.addEventListener('click', function() { goToSlide(i); });
-                    dots.appendChild(dot);
-                }
+        /* Attach click listeners to every service card via data attributes */
+        document.querySelectorAll('#services .service-card').forEach(function (card) {
+            card.addEventListener('click', function () {
+                var name   = card.getAttribute('data-name');
+                var desc   = card.getAttribute('data-desc');
+                var images = JSON.parse(card.getAttribute('data-imgs') || '[]');
+                openModal(name, desc, images);
             });
+            card.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') card.click();
+            });
+        });
+
+        function openModal(name, desc, images) {
+            titleEl.textContent = name;
+            descEl.textContent  = desc;
+            slidesWrap.innerHTML = '';
+            dotsWrap.innerHTML   = '';
+            cur = 0; tot = images.length;
+
+            if (!tot) {
+                slidesWrap.innerHTML = '<div class="svcm-no-img"><i class="fas fa-image"></i></div>';
+            } else {
+                images.forEach(function (src, i) {
+                    var s   = document.createElement('div');
+                    s.className = 'svcm-slide' + (i === 0 ? ' on' : '');
+                    var img = document.createElement('img');
+                    img.src = src;
+                    img.alt = name;
+                    s.appendChild(img);
+                    slidesWrap.appendChild(s);
+
+                    if (tot > 1) {
+                        var d = document.createElement('button');
+                        d.className = 'svcm-dot' + (i === 0 ? ' on' : '');
+                        d.setAttribute('aria-label', 'Image ' + (i + 1));
+                        (function (idx) {
+                            d.addEventListener('click', function () { goTo(idx); });
+                        }(i));
+                        dotsWrap.appendChild(d);
+                    }
+                });
+            }
+
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            clearInterval(tmr);
+            if (tot > 1) tmr = setInterval(function () { goTo((cur + 1) % tot); }, 3000);
         }
 
-        document.getElementById('serviceDetailModal').classList.add('active');
-        document.body.style.overflow = 'hidden';
-
-        // Auto-advance every 3 seconds if multiple images
-        clearInterval(slideInterval);
-        if (images.length > 1) {
-            slideInterval = setInterval(function() {
-                goToSlide((currentSlide + 1) % totalSlides);
-            }, 3000);
+        function goTo(idx) {
+            var ss = slidesWrap.querySelectorAll('.svcm-slide');
+            var ds = dotsWrap.querySelectorAll('.svcm-dot');
+            if (!ss.length) return;
+            ss[cur].classList.remove('on');
+            if (ds[cur]) ds[cur].classList.remove('on');
+            cur = idx;
+            ss[cur].classList.add('on');
+            if (ds[cur]) ds[cur].classList.add('on');
         }
-    }
 
-    function goToSlide(index) {
-        const slides = document.querySelectorAll('.sdm-slide');
-        const dots   = document.querySelectorAll('.sdm-dot');
-        if (!slides.length) return;
-
-        slides[currentSlide].classList.remove('active');
-        if (dots[currentSlide]) dots[currentSlide].classList.remove('active');
-
-        currentSlide = index;
-        slides[currentSlide].classList.add('active');
-        if (dots[currentSlide]) dots[currentSlide].classList.add('active');
-    }
-
-    function closeServiceModal() {
-        document.getElementById('serviceDetailModal').classList.remove('active');
-        document.body.style.overflow = '';
-        clearInterval(slideInterval);
-    }
-
-    function handleModalBackdropClick(e) {
-        if (e.target === document.getElementById('serviceDetailModal')) {
-            closeServiceModal();
+        function closeModal() {
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+            clearInterval(tmr);
         }
-    }
 
-    // Close on Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeServiceModal();
-    });
+        document.getElementById('svcmCloseBtn').addEventListener('click', closeModal);
+        document.getElementById('svcmQuoteBtn').addEventListener('click', closeModal);
+        modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+    }());
     </script>
 </body>
 </html>
