@@ -1,7 +1,3 @@
-// ── Clients Carousel ─────────────────────────────────────────────────────────
-// Uses CSS animation injected after layout is ready.
-// PHP renders every client TWICE for seamless infinite loop.
-
 (function () {
     function initCarousel() {
         var wrapper = document.getElementById('carouselWrapper');
@@ -10,85 +6,65 @@
         var items = wrapper.querySelectorAll('.carousel-item');
         if (!items.length) return;
 
-        // Force layout styles directly on the wrapper and items via JS
-        // This bypasses any CSS cascade issues entirely
-        wrapper.style.display        = 'flex';
-        wrapper.style.flexWrap       = 'nowrap';
-        wrapper.style.alignItems     = 'center';
-        wrapper.style.gap            = '2rem';
-        wrapper.style.width          = 'max-content';
-        wrapper.style.willChange     = 'transform';
+        wrapper.style.cssText = 'display:flex;flex-wrap:nowrap;align-items:center;gap:2rem;width:max-content;will-change:transform;';
 
         items.forEach(function (item) {
-            item.style.flex        = '0 0 180px';
-            item.style.flexShrink  = '0';
-            item.style.minWidth    = '180px';
-            item.style.height      = '120px';
-            item.style.display     = 'flex';
-            item.style.alignItems  = 'center';
-            item.style.justifyContent = 'center';
-            item.style.overflow    = 'hidden';
-            item.style.borderRadius = '8px';
-            item.style.background  = '#F0F4FA';
+            item.style.cssText = 'flex:0 0 180px;flex-shrink:0;min-width:180px;width:180px;height:120px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px;background:#F0F4FA;';
 
             var img = item.querySelector('img');
             if (img) {
-                img.style.width         = '100%';
-                img.style.height        = '100%';
-                img.style.objectFit     = 'contain';
-                img.style.padding       = '1rem';
-                img.style.display       = 'block';
-                img.style.flexShrink    = '0';
+                img.style.cssText = 'width:100%;height:100%;object-fit:contain;padding:1rem;display:block;flex-shrink:0;max-width:none;';
+            }
+
+            var ph = item.querySelector('.carousel-placeholder');
+            if (ph) {
+                ph.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.5rem;';
             }
         });
 
-        // Wait for all images to load/error before measuring
-        var imgs = Array.from(wrapper.querySelectorAll('img'));
-        Promise.all(
-            imgs.map(function (img) {
-                return new Promise(function (resolve) {
-                    if (img.complete) return resolve();
-                    img.addEventListener('load',  resolve);
-                    img.addEventListener('error', resolve);
-                });
-            })
-        ).then(function () {
-            // Give browser one more frame to finish layout
-            requestAnimationFrame(function () {
+        function startAnimation() {
+            setTimeout(function () {
                 var totalWidth = wrapper.scrollWidth;
                 var halfWidth  = Math.floor(totalWidth / 2);
 
-                if (halfWidth < 10) return; // nothing to animate
+                console.log('[Carousel] scrollWidth=' + totalWidth + ', halfWidth=' + halfWidth + ', items=' + items.length);
 
-                // px/s speed — slower = smoother feel
+                if (halfWidth < 50) {
+                    console.warn('[Carousel] halfWidth too small (' + halfWidth + '), retrying in 500ms');
+                    setTimeout(startAnimation, 500);
+                    return;
+                }
+
                 var duration = Math.max(halfWidth / 60, 8);
 
+                var old = document.getElementById('_carouselStyle');
+                if (old) old.remove();
+
                 var style = document.createElement('style');
+                style.id = '_carouselStyle';
                 style.textContent =
-                    '@keyframes _cScroll {' +
-                    '  from { transform: translateX(0); }' +
-                    '  to   { transform: translateX(-' + halfWidth + 'px); }' +
-                    '}' +
-                    '#carouselWrapper {' +
-                    '  animation: _cScroll ' + duration + 's linear infinite;' +
-                    '}' +
-                    '#carouselWrapper:hover {' +
-                    '  animation-play-state: paused;' +
-                    '}';
+                    '@keyframes _cScroll{0%{transform:translateX(0)}100%{transform:translateX(-' + halfWidth + 'px)}}' +
+                    '#carouselWrapper{animation:_cScroll ' + duration + 's linear infinite!important;}' +
+                    '#carouselWrapper:hover{animation-play-state:paused!important;}';
                 document.head.appendChild(style);
-            });
+            }, 200);
+        }
+
+        var imgs = Array.from(wrapper.querySelectorAll('img'));
+        if (!imgs.length) { startAnimation(); return; }
+
+        var loaded = 0;
+        function onDone() { if (++loaded >= imgs.length) startAnimation(); }
+        imgs.forEach(function (img) {
+            if (img.complete) onDone();
+            else { img.addEventListener('load', onDone); img.addEventListener('error', onDone); }
         });
     }
 
-    // Run after full page load (images included)
-    if (document.readyState === 'complete') {
-        initCarousel();
-    } else {
-        window.addEventListener('load', initCarousel);
-    }
+    if (document.readyState === 'complete') initCarousel();
+    else window.addEventListener('load', initCarousel);
 }());
 
-// ── Smooth anchor scrolling ───────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
         a.addEventListener('click', function (e) {
@@ -101,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// ── Auto-dismiss Bootstrap alerts ────────────────────────────────────────────
 window.addEventListener('load', function () {
     document.querySelectorAll('.alert').forEach(function (alert) {
         setTimeout(function () {

@@ -19,7 +19,11 @@ $conn->set_charset("utf8");
 
 // Define base paths — rtrim prevents double-slash when script is at domain root
 $_base_dir = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-define('BASE_URL',    'http://' . $_SERVER['HTTP_HOST'] . ($_base_dir === '' ? '' : $_base_dir) . '/');
+// Strip any filename - ensure we only keep the directory portion
+if (pathinfo($_base_dir, PATHINFO_EXTENSION) !== '') {
+    $_base_dir = dirname($_base_dir);
+}
+define('BASE_URL',    'http://' . $_SERVER['HTTP_HOST'] . $_base_dir . '/');
 define('ROOT_PATH',   dirname(dirname(__FILE__)) . '/');
 define('UPLOADS_PATH', ROOT_PATH . 'uploads/');
 define('UPLOADS_URL',  BASE_URL . 'uploads/');
