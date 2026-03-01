@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS contact_messages (
 
 -- Insert default admin user (username: admin, password: admin123)
 INSERT INTO admin_users (username, password, email) VALUES 
-('admin', '$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36P4/KLm', 'admin@nambuilders.com');
+('admin', '$2y$10$Tbgwlzktw7tTH3MLaZqeqOVjdw.LqqTMzuSo0AiItTCw7Mtv0uuIy', 'admin@nambuilders.com');
 
 -- Insert sample services
 INSERT INTO services (service_name, description, sort_order, is_active) VALUES

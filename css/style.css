@@ -58,7 +58,33 @@ header.scrolled {
     box-shadow: 0 4px 20px rgba(0,0,0,.12);
     background: rgba(255,255,255,0.99);
 }
+/* ── Carousel Fix ── */
+.clients-carousel {
+    overflow: hidden !important;
+}
 
+.carousel-wrapper {
+    display: flex !important;
+    flex-wrap: nowrap !important;        /* ← prevents items wrapping to next row */
+    align-items: center !important;
+    width: max-content !important;
+    gap: 2rem;
+}
+
+.carousel-item {
+    flex: 0 0 180px !important;          /* ← must NOT shrink */
+    flex-shrink: 0 !important;
+    height: 120px !important;
+    min-width: 180px !important;
+}
+
+.carousel-item img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    padding: 1rem !important;
+    display: block !important;           /* ← ensures img isn't inline-collapsed */
+}
 .navbar-brand {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
