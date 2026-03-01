@@ -58,33 +58,7 @@ header.scrolled {
     box-shadow: 0 4px 20px rgba(0,0,0,.12);
     background: rgba(255,255,255,0.99);
 }
-/* ── Carousel Fix ── */
-.clients-carousel {
-    overflow: hidden !important;
-}
 
-.carousel-wrapper {
-    display: flex !important;
-    flex-wrap: nowrap !important;        /* ← prevents items wrapping to next row */
-    align-items: center !important;
-    width: max-content !important;
-    gap: 2rem;
-}
-
-.carousel-item {
-    flex: 0 0 180px !important;          /* ← must NOT shrink */
-    flex-shrink: 0 !important;
-    height: 120px !important;
-    min-width: 180px !important;
-}
-
-.carousel-item img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
-    padding: 1rem !important;
-    display: block !important;           /* ← ensures img isn't inline-collapsed */
-}
 .navbar-brand {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
@@ -536,6 +510,7 @@ section.light-bg { background: var(--light-bg); }
 
 /* ── Clients Carousel ── */
 .clients-section { background: var(--light-bg); }
+
 .clients-carousel {
     position: relative;
     overflow: hidden;
@@ -544,33 +519,61 @@ section.light-bg { background: var(--light-bg); }
     border-radius: 12px;
     border: 1px solid var(--border-color);
 }
+
 .carousel-wrapper {
     display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
     gap: 2rem;
     width: max-content;
-    /* animation injected by carousel.js after images load */
+    /* animation is injected by carousel.js */
 }
+
 .carousel-item {
-    flex: 0 0 180px; height: 120px;
+    flex: 0 0 180px;
+    flex-shrink: 0;
+    min-width: 180px;
+    height: 120px;
     background: var(--light-bg);
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 8px; overflow: hidden; flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    overflow: hidden;
     transition: transform .3s;
 }
+
 .carousel-item:hover { transform: scale(1.04); }
-.carousel-item img { width: 100%; height: 100%; object-fit: contain; padding: 1rem; }
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 1rem;
+    display: block;
+    flex-shrink: 0;
+}
+
 .carousel-placeholder {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column; gap: .5rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: .5rem;
     background: var(--light-bg);
     border: 2px dashed var(--border-color);
     border-radius: 8px;
-    font-size: 1.8rem; color: var(--border-color);
+    font-size: 1.8rem;
+    color: var(--border-color);
 }
+
 .carousel-placeholder span {
-    font-size: .72rem; font-weight: 700;
-    letter-spacing: .06em; text-transform: uppercase;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
     color: var(--border-color);
 }
 
