@@ -7,27 +7,47 @@
 // That guarantees every item is fully laid out before we compute the distance.
 
 window.addEventListener('load', function () {
+    // clients carousel is built server‑side (each client duplicated once),
+    // but we still need to know the rendered width once all images are
+    // decoded so the animation can run a full cycle without ever showing
+    // the "gap" at the end of the strip.
     var wrapper = document.getElementById('carouselWrapper');
     if (!wrapper) return;
 
-    var halfWidth = wrapper.scrollWidth / 2;
-    if (halfWidth < 1) return; // nothing to animate
+    // wait for every <img> inside the wrapper to finish loading (or error)
+    var imgs = Array.from(wrapper.querySelectorAll('img'));
+    Promise.all(
+        imgs.map(function (img) {
+            return new Promise(function (resolve) {
+                if (img.complete) return resolve();
+                img.addEventListener('load', resolve);
+                img.addEventListener('error', resolve);
+            });
+        })
+    ).then(function () {
+        var halfWidth = wrapper.scrollWidth / 2;
+        if (halfWidth < 1) return; // nothing to animate
 
-    // Speed: 80 px/s feels natural; minimum 8 s total
-    var duration = Math.max(halfWidth / 80, 8);
+        // round the distance to an integer pixel value to avoid a
+        // one‑pixel gap when the animation resets to 0
+        halfWidth = Math.floor(halfWidth);
 
-    var style = document.createElement('style');
-    style.textContent =
-        '@keyframes _cLoop{' +
-        '  0%{transform:translateX(0)}' +
-        '  100%{transform:translateX(-' + halfWidth + 'px)}' +
-        '}' +
-        '#carouselWrapper{' +
-        '  animation:_cLoop ' + duration + 's linear infinite!important;' +
-        '  will-change:transform;' +
-        '}' +
-        '#carouselWrapper:hover{animation-play-state:paused!important}';
-    document.head.appendChild(style);
+        // Speed: 80 px/s feels natural; minimum 8 s total
+        var duration = Math.max(halfWidth / 80, 8);
+
+        var style = document.createElement('style');
+        style.textContent =
+            '@keyframes _cLoop{' +
+            '  0%{transform:translateX(0)}' +
+            '  100%{transform:translateX(-' + halfWidth + 'px)}' +
+            '}' +
+            '#carouselWrapper{' +
+            '  animation:_cLoop ' + duration + 's linear infinite!important;' +
+            '  will-change:transform;' +
+            '}' +
+            '#carouselWrapper:hover{animation-play-state:paused!important}';
+        document.head.appendChild(style);
+    });
 });
 
 // ── Smooth anchor scrolling ───────────────────────────────────────────────────

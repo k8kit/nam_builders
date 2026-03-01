@@ -217,7 +217,7 @@ unset($service);
                     <span class="stat-label">Years Experience</span>
                 </div>
                 <div class="stat-item reveal reveal-delay-3">
-                    <span class="stat-number"><span class="counter" data-target="8">0</span></span>
+                    <span class="stat-number"><span class="counter" data-target="0">0</span></span>
                     <span class="stat-label">Service Categories</span>
                 </div>
             </div>

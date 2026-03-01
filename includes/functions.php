@@ -54,21 +54,17 @@ function uploadFile($file, $uploadDir) {
     $fileExtension = getFileExtension($file['name']);
     $fileSize = $file['size'];
 
-    // Validate extension
     if (!in_array($fileExtension, $allowedExtensions)) {
         return ['success' => false, 'error' => 'Invalid file type. Allowed: ' . implode(', ', $allowedExtensions)];
     }
 
-    // Validate file size
     if ($fileSize > $maxFileSize) {
         return ['success' => false, 'error' => 'File size exceeds 5MB limit'];
     }
 
-    // Generate unique filename
     $newFilename = generateUniqueFilename($file['name']);
     $uploadPath = $uploadDir . $newFilename;
 
-    // Move uploaded file
     if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
         return ['success' => true, 'filename' => $newFilename, 'path' => $uploadPath];
     } else {
@@ -107,11 +103,11 @@ function displayAlert() {
     }
 }
 
-// Get all clients
+// Get all clients — only those with a real image_path (excludes old placeholder rows)
 function getAllClients($conn, $active_only = true) {
-    $query = "SELECT * FROM clients";
+    $query = "SELECT * FROM clients WHERE image_path IS NOT NULL AND image_path != ''";
     if ($active_only) {
-        $query .= " WHERE is_active = 1";
+        $query .= " AND is_active = 1";
     }
     $query .= " ORDER BY sort_order ASC";
     $result = $conn->query($query);

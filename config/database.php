@@ -17,11 +17,12 @@ if ($conn->connect_error) {
 // Set charset to utf8
 $conn->set_charset("utf8");
 
-// Define base paths
-define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/');
-define('ROOT_PATH', dirname(dirname(__FILE__)) . '/');
+// Define base paths — rtrim prevents double-slash when script is at domain root
+$_base_dir = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+define('BASE_URL',    'http://' . $_SERVER['HTTP_HOST'] . ($_base_dir === '' ? '' : $_base_dir) . '/');
+define('ROOT_PATH',   dirname(dirname(__FILE__)) . '/');
 define('UPLOADS_PATH', ROOT_PATH . 'uploads/');
-define('UPLOADS_URL', BASE_URL . 'uploads/');
+define('UPLOADS_URL',  BASE_URL . 'uploads/');
 
 // Create uploads directories if they don't exist
 if (!is_dir(UPLOADS_PATH)) {

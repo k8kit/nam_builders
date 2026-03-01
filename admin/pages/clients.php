@@ -17,9 +17,7 @@ displayAlert();
         <table class="admin-table">
             <thead>
                 <tr>
-                    
                     <th>Client Name</th>
-                    
                     <th>Status</th>
                     <th>Order</th>
                     <th>Created</th>
@@ -29,7 +27,6 @@ displayAlert();
             <tbody>
                 <?php foreach ($clients as $client): ?>
                     <tr>
-                        
                         <td><?php echo sanitize($client['client_name']); ?></td>
                         
                         <td>
