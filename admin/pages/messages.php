@@ -16,7 +16,6 @@ displayAlert();
         <table class="admin-table">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -30,7 +29,6 @@ displayAlert();
             <tbody>
                 <?php foreach ($messages as $message): ?>
                     <tr>
-                        <td><?php echo $message['id']; ?></td>
                         <td><?php echo sanitize($message['full_name']); ?></td>
                         <td><?php echo sanitize($message['email']); ?></td>
                         <td><?php echo sanitize($message['phone'] ?? 'N/A'); ?></td>

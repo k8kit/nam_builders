@@ -25,10 +25,7 @@ unset($service);
         <table class="admin-table">
             <thead>
                 <tr>
-                    
                     <th>Service Name</th>
-                    
-                    
                     <th>Status</th>
                     <th>Order</th>
                     <th>Created</th>
@@ -40,8 +37,6 @@ unset($service);
                     <tr>
                         
                         <td><?php echo sanitize($service['service_name']); ?></td>
-                        
-                        
                         <td>
                             <span class="badge" style="background-color: <?php echo $service['is_active'] ? '#28A745' : '#6C757D'; ?>;">
                                 <?php echo $service['is_active'] ? 'Active' : 'Inactive'; ?>

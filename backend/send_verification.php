@@ -93,7 +93,7 @@ try {
 </head>
 <body>
   <div class="wrap">
-    <div class="header"><h1>🏗️ NAM Builders & Supply Corp</h1></div>
+    <div class="header"><h1>NAM Builders & Supply Corp</h1></div>
     <div class="body">
       <p>You requested to send a message through our website.<br>Use the code below to verify your email address:</p>
       <div class="code">' . $code . '</div>
