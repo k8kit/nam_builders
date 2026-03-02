@@ -70,6 +70,10 @@ unset($service);
                 </a>
             </div>
         </div>
+        <div class="hero-scroll-hint">
+            <small>Scroll</small>
+            <span><i class="fas fa-chevron-down"></i></span>
+        </div>
     </section>
 
     <!-- ── Stats Bar ── -->
@@ -101,7 +105,7 @@ unset($service);
         <div class="container-lg">
             <div class="section-title reveal">
                 <span class="section-tag">Who We Are</span>
-                <h2>About Us</h2>
+                <h2>About NAM Builders</h2>
                 <p>Over a decade of building trust, one project at a time.</p>
             </div>
             <div class="about-content reveal">
