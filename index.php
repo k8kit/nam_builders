@@ -337,21 +337,12 @@ unset($service);
                 <p>Partnering with industry leaders to deliver excellence.</p>
             </div>
             <div class="clients-carousel">
-                <div class="carousel-wrapper" id="carouselWrapper">
-                    <?php
-                    // Render clients twice (A + B) for seamless infinite loop
-                    for ($pass = 0; $pass < 2; $pass++):
-                        foreach ($clients as $client):
-                    ?>
+                <div class="carousel-track" id="carouselWrapper">
+                    <?php foreach ($clients as $client): ?>
                         <div class="carousel-item">
                             <?php if (!empty($client['image_path'])): ?>
                                 <img src="<?php echo UPLOADS_URL . $client['image_path']; ?>"
-                                     alt="<?php echo sanitize($client['client_name']); ?>"
-                                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                                <div class="carousel-placeholder" style="display:none;">
-                                    <i class="fas fa-building"></i>
-                                    <span><?php echo sanitize($client['client_name']); ?></span>
-                                </div>
+                                    alt="<?php echo sanitize($client['client_name']); ?>">
                             <?php else: ?>
                                 <div class="carousel-placeholder">
                                     <i class="fas fa-building"></i>
@@ -359,7 +350,20 @@ unset($service);
                                 </div>
                             <?php endif; ?>
                         </div>
-                    <?php endforeach; endfor; ?>
+                    <?php endforeach; ?>
+                    <?php foreach ($clients as $client): ?>
+                        <div class="carousel-item">
+                            <?php if (!empty($client['image_path'])): ?>
+                                <img src="<?php echo UPLOADS_URL . $client['image_path']; ?>"
+                                    alt="<?php echo sanitize($client['client_name']); ?>">
+                            <?php else: ?>
+                                <div class="carousel-placeholder">
+                                    <i class="fas fa-building"></i>
+                                    <span><?php echo sanitize($client['client_name']); ?></span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
@@ -523,22 +527,6 @@ unset($service);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/carousel.js"></script>
-    <script>
-    // Force override carousel animation directly
-    (function() {
-        
-        var existing = document.getElementById('_carouselStyle');
-        if (existing) existing.parentNode.removeChild(existing);
-        
-        var style = document.createElement('style');
-        style.id = '_carouselStyle';
-        style.textContent = 
-            '@keyframes _cLoop{0%{transform:translateX(0)}100%{transform:translateX(-1016px)}}' +
-            '#carouselWrapper{animation:_cLoop 20s linear infinite!important;will-change:transform;}' +
-            '#carouselWrapper:hover{animation-play-state:paused!important}';
-        document.head.appendChild(style);
-    })();
-    </script>
     <script>    
     (function () {
 
@@ -858,22 +846,6 @@ unset($service);
 
     }());
     </script>
-    <script>
-    window.addEventListener('load', function() {
-        var w = document.getElementById('carouselWrapper');
-        if (!w) return;
-        var half = Math.floor(w.offsetWidth / 2);
-        var duration = Math.max(half / 60, 10);
-        var s = document.getElementById('_carouselStyle');
-        if (s) s.parentNode.removeChild(s);
-        var style = document.createElement('style');
-        style.id = '_carouselStyle';
-        style.textContent =
-            '@keyframes _cLoop{0%{transform:translateX(0)}100%{transform:translateX(-' + half + 'px)}}' +
-            '#carouselWrapper{animation:_cLoop ' + duration + 's linear infinite!important;will-change:transform;}' +
-            '#carouselWrapper:hover{animation-play-state:paused!important}';
-        document.head.appendChild(style);
-    });
-    </script>
+
 </body>
 </html>
