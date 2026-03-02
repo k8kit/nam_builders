@@ -105,7 +105,7 @@ function displayAlert() {
 
 // Get all clients — only those with a real image_path (excludes old placeholder rows)
 function getAllClients($conn, $active_only = true) {
-    $query = "SELECT * FROM clients WHERE 1=1";
+    $query = "SELECT * FROM clients WHERE image_path IS NOT NULL AND image_path != ''";
     if ($active_only) {
         $query .= " AND is_active = 1";
     }

@@ -510,7 +510,6 @@ section.light-bg { background: var(--light-bg); }
 
 /* ── Clients Carousel ── */
 .clients-section { background: var(--light-bg); }
-
 .clients-carousel {
     position: relative;
     overflow: hidden;
@@ -519,61 +518,33 @@ section.light-bg { background: var(--light-bg); }
     border-radius: 12px;
     border: 1px solid var(--border-color);
 }
-
 .carousel-wrapper {
     display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
     gap: 2rem;
     width: max-content;
-    /* animation is injected by carousel.js */
+    /* animation injected by carousel.js after images load */
 }
-
 .carousel-item {
-    flex: 0 0 180px;
-    flex-shrink: 0;
-    min-width: 180px;
-    height: 120px;
+    flex: 0 0 180px; height: 120px;
     background: var(--light-bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; overflow: hidden; flex-shrink: 0;
     transition: transform .3s;
 }
-
 .carousel-item:hover { transform: scale(1.04); }
-
-.carousel-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 1rem;
-    display: block;
-    flex-shrink: 0;
-}
-
+.carousel-item img { width: 100%; height: 100%; object-fit: contain; padding: 1rem; }
 .carousel-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: .5rem;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: .5rem;
     background: var(--light-bg);
     border: 2px dashed var(--border-color);
     border-radius: 8px;
-    font-size: 1.8rem;
-    color: var(--border-color);
+    font-size: 1.8rem; color: var(--border-color);
 }
-
 .carousel-placeholder span {
-    font-size: .72rem;
-    font-weight: 700;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+    font-size: .72rem; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
     color: var(--border-color);
 }
 

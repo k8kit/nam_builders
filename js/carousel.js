@@ -1,70 +1,56 @@
-(function () {
-    function initCarousel() {
-        var wrapper = document.getElementById('carouselWrapper');
-        if (!wrapper) return;
+// ── Clients Carousel ─────────────────────────────────────────────────────────
+// PHP renders every client TWICE so the list loops seamlessly:
+//   [A1 A2 A3 A4 | A1 A2 A3 A4]
+// Animating translateX(0 → -halfWidth) brings us back to the visual start.
+//
+// KEY: we measure scrollWidth ONLY after window 'load' (all images decoded).
+// That guarantees every item is fully laid out before we compute the distance.
 
-        var items = wrapper.querySelectorAll('.carousel-item');
-        if (!items.length) return;
+window.addEventListener('load', function () {
+    // clients carousel is built server‑side (each client duplicated once),
+    // but we still need to know the rendered width once all images are
+    // decoded so the animation can run a full cycle without ever showing
+    // the "gap" at the end of the strip.
+    var wrapper = document.getElementById('carouselWrapper');
+    if (!wrapper) return;
 
-        wrapper.style.cssText = 'display:flex;flex-wrap:nowrap;align-items:center;gap:2rem;width:max-content;will-change:transform;';
+    // wait for every <img> inside the wrapper to finish loading (or error)
+    var imgs = Array.from(wrapper.querySelectorAll('img'));
+    Promise.all(
+        imgs.map(function (img) {
+            return new Promise(function (resolve) {
+                if (img.complete) return resolve();
+                img.addEventListener('load', resolve);
+                img.addEventListener('error', resolve);
+            });
+        })
+    ).then(function () {
+        var halfWidth = wrapper.scrollWidth / 2;
+        if (halfWidth < 1) return; // nothing to animate
 
-        items.forEach(function (item) {
-            item.style.cssText = 'flex:0 0 180px;flex-shrink:0;min-width:180px;width:180px;height:120px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px;background:#F0F4FA;';
+        // round the distance to an integer pixel value to avoid a
+        // one‑pixel gap when the animation resets to 0
+        halfWidth = Math.floor(halfWidth);
 
-            var img = item.querySelector('img');
-            if (img) {
-                img.style.cssText = 'width:100%;height:100%;object-fit:contain;padding:1rem;display:block;flex-shrink:0;max-width:none;';
-            }
+        // Speed: 80 px/s feels natural; minimum 8 s total
+        var duration = Math.max(halfWidth / 80, 8);
 
-            var ph = item.querySelector('.carousel-placeholder');
-            if (ph) {
-                ph.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.5rem;';
-            }
-        });
+        var style = document.createElement('style');
+        style.textContent =
+            '@keyframes _cLoop{' +
+            '  0%{transform:translateX(0)}' +
+            '  100%{transform:translateX(-' + halfWidth + 'px)}' +
+            '}' +
+            '#carouselWrapper{' +
+            '  animation:_cLoop ' + duration + 's linear infinite!important;' +
+            '  will-change:transform;' +
+            '}' +
+            '#carouselWrapper:hover{animation-play-state:paused!important}';
+        document.head.appendChild(style);
+    });
+});
 
-        function startAnimation() {
-            setTimeout(function () {
-                var totalWidth = wrapper.scrollWidth;
-                var halfWidth  = Math.floor(totalWidth / 2);
-
-                console.log('[Carousel] scrollWidth=' + totalWidth + ', halfWidth=' + halfWidth + ', items=' + items.length);
-
-                if (halfWidth < 50) {
-                    console.warn('[Carousel] halfWidth too small (' + halfWidth + '), retrying in 500ms');
-                    setTimeout(startAnimation, 500);
-                    return;
-                }
-
-                var duration = Math.max(halfWidth / 60, 8);
-
-                var old = document.getElementById('_carouselStyle');
-                if (old) old.remove();
-
-                var style = document.createElement('style');
-                style.id = '_carouselStyle';
-                style.textContent =
-                    '@keyframes _cScroll{0%{transform:translateX(0)}100%{transform:translateX(-' + halfWidth + 'px)}}' +
-                    '#carouselWrapper{animation:_cScroll ' + duration + 's linear infinite!important;}' +
-                    '#carouselWrapper:hover{animation-play-state:paused!important;}';
-                document.head.appendChild(style);
-            }, 200);
-        }
-
-        var imgs = Array.from(wrapper.querySelectorAll('img'));
-        if (!imgs.length) { startAnimation(); return; }
-
-        var loaded = 0;
-        function onDone() { if (++loaded >= imgs.length) startAnimation(); }
-        imgs.forEach(function (img) {
-            if (img.complete) onDone();
-            else { img.addEventListener('load', onDone); img.addEventListener('error', onDone); }
-        });
-    }
-
-    if (document.readyState === 'complete') initCarousel();
-    else window.addEventListener('load', initCarousel);
-}());
-
+// ── Smooth anchor scrolling ───────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
         a.addEventListener('click', function (e) {
@@ -77,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// ── Auto-dismiss Bootstrap alerts ────────────────────────────────────────────
 window.addEventListener('load', function () {
     document.querySelectorAll('.alert').forEach(function (alert) {
         setTimeout(function () {
