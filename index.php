@@ -100,41 +100,179 @@ unset($service);
         </div>
     </div>
 
-    <!-- ── About ── -->
+<!-- ── About ── -->
     <section class="light-bg" id="about">
         <div class="container-lg">
+
+            <!-- Two-column layout: image left, text right -->
+            <div class="about-two-col">
+
+                <!-- Left: image -->
+                <div class="about-img-col reveal">
+                    <div class="about-img-wrap">
+                        <img src="css/assets/about-bg.jpg"
+                             alt="NAM Builders team"
+                             onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80'">
+                        <!-- floating badge -->
+                        <div class="about-badge">
+                            <span class="about-badge-num">15<sup>+</sup></span>
+                            <span class="about-badge-label">Years of<br>Excellence</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: heading + description + VMO icons -->
+                <div class="about-text-col reveal reveal-delay-1">
+                    <span class="section-tag">Who We Are</span>
+                    <h2 class="about-heading">About Us</h2>
+                    <div class="about-title-rule"></div>
+
+                    <p class="about-intro">
+                        NAM Builders and Supply Corp is a leading construction and industrial services company providing complete solutions for residential, commercial, and industrial projects. We specialize in general construction, renovation, electrical systems, fire protection, steel fabrication, office fit-outs, and building maintenance.
+                    </p>
+
+
+                    <div class="about-rule"></div>
+
+                    <!-- VMO trigger icons -->
+                    <div class="vmo-triggers">
+                        <button class="vmo-trigger active" data-vmo="vision">
+                            <div class="vmo-trigger-icon"><i class="fas fa-eye"></i></div>
+                            <span>Vision</span>
+                        </button>
+                        <div class="vmo-trigger-sep"></div>
+                        <button class="vmo-trigger" data-vmo="mission">
+                            <div class="vmo-trigger-icon"><i class="fas fa-bullseye"></i></div>
+                            <span>Mission</span>
+                        </button>
+                        <div class="vmo-trigger-sep"></div>
+                        <button class="vmo-trigger" data-vmo="objectives">
+                            <div class="vmo-trigger-icon"><i class="fas fa-chart-line"></i></div>
+                            <span>Objectives</span>
+                        </button>
+                    </div>
+
+                    <!-- VMO content accordion -->
+                    <div class="vmo-accordion">
+                        <div class="vmo-panel vmo-vision open" id="vmo-vision">
+                            <div class="vmo-panel-inner">
+                                <h4><i class="fas fa-eye"></i> Vision</h4>
+                                <p>We envision a future where the property maintenance industry is synonymous with positive change and relentless innovation. This vision drives us to redefine the standard of service quality and consistency that clients can rightfully expect from a company. Our unwavering commitment to honesty, integrity, and transparency serves as the cornerstone of trust as we work towards this vision.</p>
+                            </div>
+                        </div>
+                        <div class="vmo-panel vmo-mission" id="vmo-mission">
+                            <div class="vmo-panel-inner">
+                                <h4><i class="fas fa-bullseye"></i> Mission</h4>
+                                <p>Our mission is to cultivate enduring relationships with our valued customers. This mission complements our vision and objectives, emphasizing the paramount importance of customer satisfaction and stringent quality control. Every day, we strive to not only meet but exceed your expectations, ensuring your trust and peace of mind in our journey towards a transformed property maintenance industry.</p>
+                            </div>
+                        </div>
+                        <div class="vmo-panel vmo-objectives" id="vmo-objectives">
+                            <div class="vmo-panel-inner">
+                                <h4><i class="fas fa-chart-line"></i> Business Objectives</h4>
+                                <p>Our primary goal is to consistently attain sustainable, long-term growth in cash flow, aimed at maximizing returns for our valued investors. As we pursue this financial success, we are deeply committed to upholding stringent standards of environmental responsibility, safety, and health compliance throughout all our operations.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+<!-- ── Our Values ── -->
+    <section id="values">
+        <div class="container-lg">
             <div class="section-title reveal">
-                <span class="section-tag">Who We Are</span>
-                <h2>About NAM Builders</h2>
-                <p>Over a decade of building trust, one project at a time.</p>
+                <span class="section-tag">What We Stand For</span>
+                <h2>Our Values</h2>
+                <p>At NAM Builders and Supply Corp., our commitment is rooted in a set of core values that drive our business.</p>
             </div>
-            <div class="about-content reveal">
-                <p style="text-align:center;font-size:1.08rem;color:var(--text-light);max-width:680px;margin:0 auto;">
-                    NAM Builders and Supply Corp is a leading construction and industrial services company providing complete solutions for residential, commercial, and industrial projects. We specialize in general construction, renovation, electrical systems, fire protection, steel fabrication, office fit-outs, and building maintenance.
-                </p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card reveal reveal-delay-1">
-                    <div class="feature-icon"><i class="fas fa-medal"></i></div>
-                    <h3>Quality Workmanship</h3>
-                    <p>Expert craftsmanship and strict quality control in every project we undertake.</p>
+
+            <div class="values-orbit">
+
+                <!-- ROW 1: Left, Top-Center, Right -->
+                <div class="val-item val-left-1 reveal reveal-delay-1">
+                    <div class="val-bubble">
+                        <div class="val-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h4>Professional Development &amp; Personal Skills</h4>
+                        <p>We are committed to advancing our talents and skills to their fullest potential, whether as individuals, professionals, or managers.</p>
+                    </div>
                 </div>
-                <div class="feature-card reveal reveal-delay-2">
-                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>Safety First</h3>
-                    <p>Committed to maintaining the highest safety standards on every job site.</p>
+
+                <div class="val-item val-top reveal reveal-delay-2">
+                    <div class="val-bubble">
+                        <div class="val-icon"><i class="fas fa-star"></i></div>
+                        <h4>Quality</h4>
+                        <p>We uphold the highest standards of professional excellence, ensuring the quality of our work aligns with the project's objectives.</p>
+                    </div>
                 </div>
-                <div class="feature-card reveal reveal-delay-3">
-                    <div class="feature-icon"><i class="fas fa-handshake"></i></div>
-                    <h3>Client Satisfaction</h3>
-                    <p>Dedicated to exceeding expectations and building lasting partnerships.</p>
+
+                <div class="val-item val-right-1 reveal reveal-delay-1">
+                    <div class="val-bubble">
+                        <div class="val-icon"><i class="fas fa-smile"></i></div>
+                        <h4>Customer Satisfaction</h4>
+                        <p>We go above and beyond to exceed the expectations of our customers, both internally and externally, by proactively anticipating, understanding, and responding to their needs.</p>
+                    </div>
                 </div>
-                <div class="feature-card reveal reveal-delay-4">
-                    <div class="feature-icon"><i class="fas fa-rocket"></i></div>
-                    <h3>On-Time Delivery</h3>
-                    <p>Reliable and efficient project delivery from planning to completion.</p>
+
+                <!-- ROW 2: Left, CENTER LOGO, Right -->
+                <div class="val-item val-left-2 reveal reveal-delay-1">
+                    <div class="val-bubble">
+                        <div class="val-icon"><i class="fas fa-lightbulb"></i></div>
+                        <h4>Entrepreneurial</h4>
+                        <p>We encourage creativity, flexibility, and innovative thinking in our approach to challenges and opportunities.</p>
+                    </div>
                 </div>
-            </div>
+
+                <div class="val-center reveal reveal-delay-2">
+                    <div class="val-center-ring">
+                        <div class="val-center-inner">
+                            <img src="uploads/nam-logo.png"
+                                 alt="NAM Builders and Supply Corp."
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="val-logo-placeholder" style="display:none;">
+                                <i class="fas fa-building"></i>
+                                <span>NAM</span>
+                                <small>Builders &amp; Supply Corp.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="val-item val-right-2 reveal reveal-delay-1">
+                    <div class="val-bubble">
+                        <div class="val-icon"><i class="fas fa-comments"></i></div>
+                        <h4>Communication</h4>
+                        <p>We believe in transparent and honest communication, providing information openly and candidly.</p>
+                    </div>
+                </div>
+
+                <!-- ROW 3: Left, Bottom-Center, Right -->
+                <div class="val-item val-left-3 reveal reveal-delay-1">
+                    <div class="val-bubble">
+                        <div class="val-icon"><i class="fas fa-sun"></i></div>
+                        <h4>Attitude</h4>
+                        <p>We approach our work with a positive and enthusiastic spirit, bringing vibrancy to every task.</p>
+                    </div>
+                </div>
+
+                <div class="val-item val-bottom reveal reveal-delay-2">
+                    <div class="val-bubble">
+                        <div class="val-icon"><i class="fas fa-users"></i></div>
+                        <h4>Teamwork</h4>
+                        <p>We foster a collaborative environment where each team member focuses on a common goal, working together to achieve success.</p>
+                    </div>
+                </div>
+
+                <div class="val-item val-right-3 reveal reveal-delay-1">
+                    <div class="val-bubble">
+                        <div class="val-icon"><i class="fas fa-hands"></i></div>
+                        <h4>Respect</h4>
+                        <p>We demonstrate respect for others through our actions, treating everyone with consideration and professionalism.</p>
+                    </div>
+                </div>
+
+            </div><!-- /.values-orbit -->
         </div>
     </section>
 

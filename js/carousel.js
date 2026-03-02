@@ -288,6 +288,44 @@
         if (e.key === 'Escape') { closeVerifyModal(); closeSvcModal(); }
     });
 
+    /* ════════════════════════════════════════════════════════
+    VMO ACCORDION — Click interaction only
+    Add this block inside the IIFE in carousel.js, or as a
+    separate <script> at the bottom of index.php
+    ════════════════════════════════════════════════════════ */
+
+    (function () {
+
+        var vmoOrder = ['vision', 'mission', 'objectives'];
+        var triggers = document.querySelectorAll('.vmo-trigger');
+        var panels   = document.querySelectorAll('.vmo-panel');
+
+        if (!triggers.length || !panels.length) return;
+
+        /* ── Core: open a panel by key ─────────────────────── */
+        function openVmo(key) {
+            if (vmoOrder.indexOf(key) === -1) return;
+
+            triggers.forEach(function (t) {
+                t.classList.toggle('active', t.getAttribute('data-vmo') === key);
+            });
+            panels.forEach(function (p) {
+                p.classList.toggle('open', p.id === 'vmo-' + key);
+            });
+        }
+
+        /* ── Click on trigger icons ─────────────────────────── */
+        triggers.forEach(function (t) {
+            t.addEventListener('click', function () {
+                openVmo(t.getAttribute('data-vmo'));
+            });
+        });
+
+        /* Open Vision by default on load */
+        openVmo('vision');
+
+    }());
+
     function sendOTP(email, onSuccess, onError) {
         var fd = new FormData();
         fd.append('email', email);
