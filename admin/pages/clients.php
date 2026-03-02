@@ -5,7 +5,7 @@ displayAlert();
 ?>
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h2>Manage Clients</h2>
+    <h2>List of Clients</h2>
     <button class="btn-add" onclick="openAddClientModal()">
         <i class="fas fa-plus"></i> Add New Client
     </button>

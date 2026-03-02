@@ -13,7 +13,7 @@ unset($service);
 ?>
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h2>Manage Services</h2>
+    <h2>List of Services</h2>
     <button class="btn-add" onclick="openAddServiceModal()">
         <i class="fas fa-plus"></i> Add New Service
     </button>
@@ -38,7 +38,7 @@ unset($service);
             <tbody>
                 <?php foreach ($services as $service): ?>
                     <tr>
-                        <td><?php echo $service['id']; ?></td>
+                        
                         <td><?php echo sanitize($service['service_name']); ?></td>
                         
                         

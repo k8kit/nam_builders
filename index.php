@@ -1,4 +1,5 @@
 <?php
+
 require_once 'config/database.php';
 require_once 'includes/functions.php';
 
@@ -13,8 +14,10 @@ foreach ($services as &$service) {
         $service['images'] = [['image_path' => $service['image_path']]];
     }
 }
+
 unset($service);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

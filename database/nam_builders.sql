@@ -66,16 +66,7 @@ INSERT INTO services (service_name, description, sort_order, is_active) VALUES
 ('Building Maintenance', 'Regular maintenance services to keep your building in optimal condition year-round.', 7, 1),
 ('Supply Services', 'Construction materials, electrical components, PPE, and office supplies delivered on time.', 8, 1);
 
--- Insert sample clients (placeholder entries)
-INSERT INTO clients (client_name, description, sort_order, is_active) VALUES
-('Client 1', 'Client Logo 1', 1, 1),
-('Client 2', 'Client Logo 2', 2, 1),
-('Client 3', 'Client Logo 3', 3, 1),
-('Client 4', 'Client Logo 4', 4, 1),
-('Client 5', 'Client Logo 5', 5, 1),
-('Client 6', 'Client Logo 6', 6, 1),
-('Client 7', 'Client Logo 7', 7, 1),
-('Client 8', 'Client Logo 8', 8, 1);
+
 
 -- Migration: Add service_images table for multiple images per service
 -- Run this against your nam_builders database
