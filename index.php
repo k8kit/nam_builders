@@ -4,7 +4,8 @@ require_once 'config/database.php';
 require_once 'includes/functions.php';
 
 $services = getAllServices($conn, true);
-$clients  = getAllClients($conn, true);
+$clients = getAllClients($conn, true);
+
 
 foreach ($services as &$service) {
     $sid = intval($service['id']);
@@ -474,6 +475,20 @@ unset($service);
             </div>
         </div>
     </div>
+    <script>
+    window.addEventListener('load', function() {
+        var w = document.getElementById('carouselWrapper');
+        document.getElementById('d1').textContent = w ? 'YES' : 'NO';
+        if (!w) return;
+        document.getElementById('d2').textContent = w.scrollWidth;
+        document.getElementById('d3').textContent = w.scrollWidth / 2;
+        document.getElementById('d4').textContent = w.querySelectorAll('.carousel-item').length;
+        var imgs = w.querySelectorAll('img');
+        var loaded = 0;
+        imgs.forEach(function(img) { if (img.complete && img.naturalWidth > 0) loaded++; });
+        document.getElementById('d5').textContent = loaded + ' / ' + imgs.length;
+    });
+    </script>
 
     <!-- ── Footer ── -->
     <footer>
@@ -509,6 +524,22 @@ unset($service);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/carousel.js"></script>
     <script>
+    // Force override carousel animation directly
+    (function() {
+        
+        var existing = document.getElementById('_carouselStyle');
+        if (existing) existing.parentNode.removeChild(existing);
+        
+        var style = document.createElement('style');
+        style.id = '_carouselStyle';
+        style.textContent = 
+            '@keyframes _cLoop{0%{transform:translateX(0)}100%{transform:translateX(-1016px)}}' +
+            '#carouselWrapper{animation:_cLoop 20s linear infinite!important;will-change:transform;}' +
+            '#carouselWrapper:hover{animation-play-state:paused!important}';
+        document.head.appendChild(style);
+    })();
+    </script>
+    <script>    
     (function () {
 
         /* ── 1. Navbar scroll + active link ── */
@@ -826,6 +857,23 @@ unset($service);
         });
 
     }());
+    </script>
+    <script>
+    window.addEventListener('load', function() {
+        var w = document.getElementById('carouselWrapper');
+        if (!w) return;
+        var half = Math.floor(w.offsetWidth / 2);
+        var duration = Math.max(half / 60, 10);
+        var s = document.getElementById('_carouselStyle');
+        if (s) s.parentNode.removeChild(s);
+        var style = document.createElement('style');
+        style.id = '_carouselStyle';
+        style.textContent =
+            '@keyframes _cLoop{0%{transform:translateX(0)}100%{transform:translateX(-' + half + 'px)}}' +
+            '#carouselWrapper{animation:_cLoop ' + duration + 's linear infinite!important;will-change:transform;}' +
+            '#carouselWrapper:hover{animation-play-state:paused!important}';
+        document.head.appendChild(style);
+    });
     </script>
 </body>
 </html>
