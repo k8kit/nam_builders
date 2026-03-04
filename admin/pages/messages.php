@@ -227,6 +227,7 @@ displayAlert();
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Service</th>
+                    
                     <th>Date</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -429,21 +430,27 @@ function sendReply() {
     fd.append('reply_body',  body);
 
     fetch('../backend/reply_message.php', { method: 'POST', body: fd })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
+        .then(function(r) { return r.text(); })
+        .then(function(text) {
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reply';
-            if (data.success) {
-                showReplyAlert(escHtml(data.message), 'success');
-                document.getElementById('mmReplyTextarea').value = '';
-            } else {
-                showReplyAlert(escHtml(data.message), 'error');
+            try {
+                var data = JSON.parse(text);
+                if (data.success) {
+                    showReplyAlert(escHtml(data.message), 'success');
+                    document.getElementById('mmReplyTextarea').value = '';
+                } else {
+                    showReplyAlert(escHtml(data.message), 'error');
+                }
+            } catch (e) {
+                console.error('Server response (non-JSON):', text);
+                showReplyAlert('Server error. Check browser console for details.', 'error');
             }
         })
         .catch(function() {
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reply';
-            showReplyAlert('Network error. Please try again.', 'error');
+            showReplyAlert('Could not reach the server. Please try again.', 'error');
         });
 }
 
