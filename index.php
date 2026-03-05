@@ -44,7 +44,7 @@ unset($service);
                         <li class="nav-item"><a class="nav-link" href="#home"     data-section="home">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#about"    data-section="about">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="#services" data-section="services">Services</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#team"  data-section="team">Team</a></li>
+                        
                         <li class="nav-item ms-lg-2">
                             <button class="btn-contact-nav" id="navContactBtn" type="button">
                                 <i class="fas fa-paper-plane"></i> Contact Us
@@ -351,88 +351,52 @@ unset($service);
             </div>
         </div>
     </div>
-
-    <!-- ── Team ── -->
-    <section id="team">
+    <!-- ── Founder / CEO ── -->
+    <section id="founder">
         <div class="container-lg">
-            <div class="section-title reveal">
-                <span class="section-tag">The People Behind the Work</span>
-                <h2>Our Team</h2>
-                <p>Dedicated professionals committed to delivering excellence on every project.</p>
-            </div>
-            <div class="team-grid">
-                <div class="team-card reveal reveal-delay-1">
-                    <div class="team-photo">
-                        <img src="css/assets/hero-bg.jpg" alt="Team Member">
-                        <div class="team-hover-overlay">
-                            <div class="team-socials">
-                                <a href="https://www.facebook.com/k8.kit" class="team-social-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#" class="team-social-btn" title="Twitter / X"><i class="fab fa-x-twitter"></i></a>
-                                <a href="#" class="team-social-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
-                            <p class="team-hover-quote">"Excellence is not a skill, it's an attitude."</p>
+            <div class="founder-wrap">
+                <!-- Text card (appears first) -->
+                <div class="founder-text-col founder-reveal-text">
+                    <span class="section-tag">Leadership</span>
+                    <div class="founder-card">
+                        <div class="founder-quote-icon">
+                            <i class="fas fa-quote-left"></i>
                         </div>
-                    </div>
-                    <div class="team-info">
-                        <h4 class="team-name">NAM</h4>
-                        <span class="team-role">Project Manager</span>
+                        <blockquote class="founder-quote">
+                            "We don't just build structures — we build trust, relationships, and futures. Every project we take on is a reflection of our unwavering commitment to excellence, safety, and the people we serve."
+                        </blockquote>
+                        <div class="founder-rule"></div>
+                        <div class="founder-identity">
+                            <div class="founder-initials">N</div>
+                            <div>
+                                <h3 class="founder-name">NAM Founder</h3>
+                                <span class="founder-title">Founder &amp; Chief Executive Officer</span>
+                                <div class="founder-socials">
+                                    <a href="#" class="founder-social" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="#" class="founder-social" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="team-card reveal reveal-delay-2">
-                    <div class="team-photo">
-                        <img src="css/assets/hero-bg.jpg" alt="Team Member">
-                        <div class="team-hover-overlay">
-                            <div class="team-socials">
-                                <a href="#" class="team-social-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#" class="team-social-btn" title="Twitter / X"><i class="fab fa-x-twitter"></i></a>
-                                <a href="#" class="team-social-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
-                            <p class="team-hover-quote">"Building trust, one project at a time."</p>
+                <!-- CEO photo (slides in from right) -->
+                <div class="founder-photo-col founder-reveal-photo">
+                    <div class="founder-photo-frame">
+                        <div class="founder-photo-bg-accent"></div>
+                        <div class="founder-photo-wrap">
+                            <img src="css/assets/ceo.jpg"
+                                alt="NAM Builders Founder & CEO"
+                                onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80'">
                         </div>
-                    </div>
-                    <div class="team-info">
-                        <h4 class="team-name">NAM</h4>
-                        <span class="team-role">Founder, CEO</span>
-                    </div>
-                </div>
-                <div class="team-card reveal reveal-delay-3">
-                    <div class="team-photo">
-                        <img src="css/assets/hero-bg.jpg" alt="Team Member">
-                        <div class="team-hover-overlay">
-                            <div class="team-socials">
-                                <a href="#" class="team-social-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#" class="team-social-btn" title="Twitter / X"><i class="fab fa-x-twitter"></i></a>
-                                <a href="#" class="team-social-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
-                            <p class="team-hover-quote">"Quality is never an accident."</p>
+                        <div class="founder-badge-float">
+                            <i class="fas fa-award"></i>
+                            <span>Founder &amp; CEO</span>
                         </div>
-                    </div>
-                    <div class="team-info">
-                        <h4 class="team-name">NAM</h4>
-                        <span class="team-role">Lead Engineer</span>
-                    </div>
-                </div>
-                <div class="team-card reveal reveal-delay-4">
-                    <div class="team-photo">
-                        <img src="css/assets/hero-bg.jpg" alt="Team Member">
-                        <div class="team-hover-overlay">
-                            <div class="team-socials">
-                                <a href="#" class="team-social-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#" class="team-social-btn" title="Twitter / X"><i class="fab fa-x-twitter"></i></a>
-                                <a href="#" class="team-social-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
-                            <p class="team-hover-quote">"Safety first, quality always."</p>
-                        </div>
-                    </div>
-                    <div class="team-info">
-                        <h4 class="team-name">NAM</h4>
-                        <span class="team-role">Safety Officer</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
     <!-- ── Contact Modal ── -->
     <div id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
         <div class="cm-box">

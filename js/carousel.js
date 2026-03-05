@@ -509,6 +509,24 @@
             });
     });
 
+    /* ═══════════════════════════════════════════════
+    9. FOUNDER SECTION SCROLL REVEAL
+    ═══════════════════════════════════════════════ */
+    (function () {
+        var founderEls = document.querySelectorAll('.founder-reveal-text, .founder-reveal-photo');
+        if (!founderEls.length) return;
+
+        var founderObs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('founder-in');
+                    founderObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        founderEls.forEach(function (el) { founderObs.observe(el); });
+    }());
 
     /* ═══════════════════════════════════════════════
        8. AUTO-DISMISS BOOTSTRAP ALERTS
