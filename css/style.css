@@ -185,7 +185,7 @@ header.scrolled {
     animation: heroFadeIn .9s .2s ease both;
 }
 .hero .highlight { 
-    color: #64B5F6;
+    color: var(--primary-color);
     text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 0 30px rgba(100,181,246,0.4);
 }
 

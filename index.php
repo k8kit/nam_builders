@@ -20,7 +20,7 @@ unset($service);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NAM Builders and Supply Corp - Building Excellence, Delivering Quality</title>
+    <title>NAM Builders and Supply Corp</title>
     <meta name="description" content="Complete construction and industrial solutions for residential, commercial, and industrial projects.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@ unset($service);
             <div class="container-lg">
                 <a class="navbar-brand" href="#home">
                     <img src="css/assets/logo.png" alt="NAM Builders" onerror="this.style.display='none'">
-                    <span>NAM Builders <span style="color:var(--primary-color);">&amp; Supply Corp.</span></span>
+                    <span style="color:var(--primary-dark);">NAM Builders and Supply Corp.</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
@@ -140,13 +140,38 @@ unset($service);
                         </div>
                         <div class="vmo-panel vmo-objectives" id="vmo-objectives">
                             <div class="vmo-panel-inner">
-                                <h4><i class="fas fa-chart-line"></i> Business Objectives</h4>
+                                <h4><i class="fas fa-chart-line"></i> Objectives</h4>
                                 <p>Our primary goal is to consistently attain sustainable, long-term growth in cash flow, aimed at maximizing returns for our valued investors. As we pursue this financial success, we are deeply committed to upholding stringent standards of environmental responsibility, safety, and health compliance throughout all our operations.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- ── Stats Bar ── -->
+            <div class="stats-bar" id="stats" style="border-radius: 12px; margin: 3rem 0 2rem;">
+                <div class="container-lg">
+                    <div class="stats-grid">
+                        <div class="stat-item reveal">
+                            <span class="stat-number"><span class="counter" data-target="150">0</span>+</span>
+                            <span class="stat-label">Projects Completed</span>
+                        </div>
+                        <div class="stat-item reveal reveal-delay-1">
+                            <span class="stat-number"><span class="counter" data-target="50">0</span>+</span>
+                            <span class="stat-label">Happy Clients</span>
+                        </div>
+                        <div class="stat-item reveal reveal-delay-2">
+                            <span class="stat-number"><span class="counter" data-target="15">0</span>+</span>
+                            <span class="stat-label">Years Experience</span>
+                        </div>
+                        <div class="stat-item reveal reveal-delay-3">
+                            <span class="stat-number"><span class="counter" data-target="8">0</span></span>
+                            <span class="stat-label">Service Categories</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="section-title reveal">
                 <h2>Our Values</h2>
                 <p>At NAM Builders and Supply Corp., our commitment is rooted in a set of core values that drive our business.</p>
@@ -225,29 +250,6 @@ unset($service);
             </div>
         </div>
     </section>
-        <!-- ── Stats Bar ── -->
-    <div class="stats-bar" id="stats">
-        <div class="container-lg">
-            <div class="stats-grid">
-                <div class="stat-item reveal">
-                    <span class="stat-number"><span class="counter" data-target="150">0</span>+</span>
-                    <span class="stat-label">Projects Completed</span>
-                </div>
-                <div class="stat-item reveal reveal-delay-1">
-                    <span class="stat-number"><span class="counter" data-target="50">0</span>+</span>
-                    <span class="stat-label">Happy Clients</span>
-                </div>
-                <div class="stat-item reveal reveal-delay-2">
-                    <span class="stat-number"><span class="counter" data-target="15">0</span>+</span>
-                    <span class="stat-label">Years Experience</span>
-                </div>
-                <div class="stat-item reveal reveal-delay-3">
-                    <span class="stat-number"><span class="counter" data-target="8">0</span></span>
-                    <span class="stat-label">Service Categories</span>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- ── Services ── -->
     <section id="services">
@@ -369,7 +371,7 @@ unset($service);
                         <div class="founder-identity">
                             <div class="founder-initials">N</div>
                             <div>
-                                <h3 class="founder-name">NAM Founder</h3>
+                                <h3 class="founder-name">Aberto Molinyawe Jr</h3>
                                 <span class="founder-title">Founder &amp; Chief Executive Officer</span>
                                 <div class="founder-socials">
                                     <a href="#" class="founder-social" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
@@ -384,7 +386,7 @@ unset($service);
                     <div class="founder-photo-frame">
                         <div class="founder-photo-bg-accent"></div>
                         <div class="founder-photo-wrap">
-                            <img src="css/assets/ceo.jpg"
+                            <img src="css/assets/hero-bg.jpg"
                                 alt="NAM Builders Founder & CEO"
                                 onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80'">
                         </div>
